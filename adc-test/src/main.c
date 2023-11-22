@@ -17,6 +17,7 @@
 #include <avr/interrupt.h>  // Interrupts standard C library for AVR-GCC
 #include "timer.h"          // Timer library for AVR-GCC
 #include <lcd.h>            // Peter Fleury's LCD library
+#include <oled.h>
 #include <stdlib.h>         // C library. Needed for number conversions
 #include <uart.h>           // Peter Fleury's UART library
 #include <math.h>
@@ -35,15 +36,41 @@
 
 #endif
 
+// Global vars
+    float value;
+    float tenths;
+    float hundreds;
+    char Vstring[4];  // String for converted numbers by itoa()
+    char Tstring[4];
+    char Hstring[4];
+
 int main(void)
 {
     uart_init(UART_BAUD_SELECT(115200, F_CPU));
     uart_puts("Init start\r\n");
 
     // Initialize display
-    lcd_init(LCD_DISP_ON);
-    lcd_gotoxy(1, 0); lcd_puts("value:");
-    lcd_gotoxy(8, 0); lcd_puts("a");  // Put ADC value in decimal
+    // lcd_init(LCD_DISP_ON);
+    // lcd_gotoxy(1, 0); lcd_puts("value:");
+    // lcd_gotoxy(8, 0); lcd_puts("a");  // Put ADC value in decimal
+
+    oled_init(OLED_DISP_ON);
+    oled_clrscr();
+    oled_charMode(DOUBLESIZE);
+    oled_puts("OLED disp.");
+    oled_charMode(NORMALSIZE);
+    // oled_gotoxy(x, y)
+    oled_gotoxy(0, 2);
+    oled_puts("128x64, SHH1106");
+    // oled_drawLine(x1, y1, x2, y2, color)
+    oled_drawLine(0, 25, 120, 25, WHITE);
+    oled_gotoxy(0, 4);
+    oled_puts("AVR course, Brno");
+
+    oled_display();
+
+    // lcd_gotoxy(1, 0); lcd_puts("value:");
+    // lcd_gotoxy(8, 0); lcd_puts("a");  // Put ADC value in decimal
 
     // Configure Analog-to-Digital Convertion unit
     // Select ADC voltage reference to "AVcc with external capacitor at AREF pin"
@@ -62,17 +89,46 @@ int main(void)
 
     // Configure 16-bit Timer/Counter1 to start ADC conversion
     // Set prescaler to 4 ms and enable overflow interrupt
-    TIM1_OVF_4MS
+    TIM1_OVF_262MS
     TIM1_OVF_ENABLE
 
     // Enables interrupts by setting the global interrupt mask
     sei();
     uart_puts("Init end\r\n");  
+
+    oled_clrscr();
+    oled_gotoxy(6,3);
+    oled_puts("Voltage:");
+    oled_gotoxy(8,4);
+    oled_putc(',');
+    oled_gotoxy(12,4);
+    oled_putc('V');
+
     // Infinite loop
     while (1)
     {
-        /* Empty loop. All subsequent operations are performed exclusively 
-         * inside interrupt service routines ISRs */
+        itoa(value, Vstring, 10);
+        uart_puts(Vstring); 
+        uart_putc(',');
+
+        tenths = 10.00*(value - floor(value));
+        itoa(tenths, Tstring, 10);
+        uart_puts(Tstring); 
+
+        hundreds = 10*(tenths - floor(tenths));
+        itoa(hundreds, Hstring, 10);
+        uart_puts(Hstring);
+        uart_puts("V\r\n");
+
+        oled_gotoxy(7,4);
+        oled_puts(Vstring);
+        oled_gotoxy(9,4);
+        oled_puts(Tstring);
+        oled_gotoxy(10,4);
+        oled_puts(Hstring);
+
+
+        oled_display();
     }
 
     // Will never reach this
@@ -89,7 +145,7 @@ ISR(TIMER1_OVF_vect)
 {
     // Start ADC conversion
     ADCSRA = ADCSRA | (1<<ADSC);
-    uart_puts("ADC conv\r\n");
+    // uart_puts("ADC conv\r\n");
 
 }
 
@@ -100,18 +156,11 @@ ISR(TIMER1_OVF_vect)
  **********************************************************************/
 ISR(ADC_vect)
 {
-    // uint16_t value;
-    float value;
-    char string[4];  // String for converted numbers by itoa()
+
 
     // Read converted value
     // Note that, register pair ADCH and ADCL can be read as a 16-bit value ADC
-    value = 5*ADC/1024;
+    value = 5.0*ADC/1024.0;
     // Convert "value" to "string" and display it
-    itoa(value, string, 10);
-    lcd_gotoxy(8, 0);
-    lcd_puts("    ");
-    lcd_gotoxy(8, 0);
-    lcd_puts(string);   
-    
+
 }
