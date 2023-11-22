@@ -44,13 +44,15 @@
     float value;
     float tenths;
     float hundreds;
+    float thousands;
     char Vstring[4];  // String for converted numbers by itoa()
     char Tstring[4];
     char Hstring[4];
+    char Thstring[4];
 
 int main(void)
 {
-    // Configure Analog-to-Digital Convertion unit
+    // Configure Analog-to-Digital Converter unit
     // Select ADC voltage reference to "AVcc with external capacitor at AREF pin"
     ADMUX |= (1<<REFS0);
     // Select input channel ADC0 (voltage divider pin)
@@ -61,14 +63,13 @@ int main(void)
     ADCSRA |= (1<<ADIE);
     // Set clock prescaler to 128
     // ADCSRA = ADCSRA | (1<<ADPS2 | 1<<ADPS1 | 1<<ADPS0);
-    ADCSRA &= ~(1<<ADPS1 | 1<<ADPS0); ADCSRA |= (1<<ADPS2); // Prescaler set to 16. ADPS[2:0] = 000
+    ADCSRA &= ~(1<<ADPS1 | 1<<ADPS0); ADCSRA |= (1<<ADPS2); // Prescaler set to 16. ADPS[2:0] = 100
     // Enable ADC Auto Trigger Enable
     ADCSRA |= (1<<ADATE);
     // Start Conversion
     ADCSRA |= (1<<ADSC);
-    // Set Free Running Mode as ADC Auto Trigger Source ADTS[2:0]
-    ADCSRB |= (1<<ADTS2 | 1<<ADTS1 | 1<<ADTS0);     // Reset to 111
-    ADCSRB &= ~(1<<ADTS2 | 1<<ADTS1 | 1<<ADTS0);    // Set to 000
+    // Set Free Running Mode as ADC Auto Trigger Source ADTS[2:0] = 000
+    ADCSRB &= ~(1<<ADTS2 | 1<<ADTS1 | 1<<ADTS0);    
 
     uart_init(UART_BAUD_SELECT(115200, F_CPU));
     uart_puts("Init start\r\n");
@@ -110,12 +111,14 @@ int main(void)
     // Infinite loop
     while (1)
     {   
-        tenths = 10.00*(value - floor(value));
-        hundreds = 10*(tenths - floor(tenths));
-        
+        tenths = 10.0*(value - floor(value));
+        hundreds = 10.0 * (tenths - floor(tenths));
+        thousands = 10.0 * (hundreds - floor(hundreds));
+
         itoa(value, Vstring, 10);
         itoa(tenths, Tstring, 10);
         itoa(hundreds, Hstring, 10);
+        itoa(thousands, Thstring, 10);
 
         oled_gotoxy(7,4);
         oled_puts(Vstring);
@@ -123,11 +126,14 @@ int main(void)
         oled_puts(Tstring);
         oled_gotoxy(10,4);
         oled_puts(Hstring);
+        oled_gotoxy(11,4);
+        oled_puts(Thstring);
 
         uart_puts(Vstring); 
         uart_putc(',');
         uart_puts(Tstring); 
         uart_puts(Hstring);
+        uart_puts(Thstring); 
         uart_puts("V\r\n");
 
         oled_display();
@@ -156,5 +162,6 @@ ISR(ADC_vect)
 {
     // Read converted value
     // Note that, register pair ADCH and ADCL can be read as a 16-bit value ADC
-    value = 5.0*ADC/1024.0; // Value converter for reading voltage in reference to AVCC = 5V
+    value = 5.0*ADC/1023.0; // Value converter for reading voltage in reference to AVCC = 5V
+    
 }

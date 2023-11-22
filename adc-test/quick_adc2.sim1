@@ -1,0 +1,23 @@
+<circuit version="1.0.0-SR1" rev="1402" stepSize="1000000" stepsPS="1000000" NLsteps="100000" reaStep="1000000" animate="0" >
+
+<item itemtype="Ground" CircId="Ground-1" mainComp="false" Show_id="false" Show_Val="false" Pos="832,904" rotation="0" hflip="1" vflip="1" label="Ground-1" idLabPos="-16,8" labelrot="0" valLabPos="-16,20" valLabRot="0" />
+
+<item itemtype="Ssd1306" CircId="Ssd1306-2" mainComp="false" Show_id="true" Show_Val="false" Pos="788,716" rotation="0" hflip="1" vflip="1" label="Ssd1306-2" idLabPos="-32,-60" labelrot="0" valLabPos="-16,20" valLabRot="0" Color="White" Control_Code="60" Frequency="100 _KHz" />
+
+<item itemtype="Potentiometer" CircId="Potentiometer-3" mainComp="false" ShowProp="Resistance" Show_id="false" Show_Val="true" Pos="832,828" rotation="90" hflip="1" vflip="1" label="Potentiometer-3" idLabPos="-16,-40" labelrot="0" valLabPos="15,-20" valLabRot="0" Resistance="1000 Ω" Value_Ohm="200 Ω" />
+
+<item itemtype="Fixed Voltage" CircId="Fixed Voltage-4" mainComp="false" Show_id="false" Show_Val="false" Pos="848,804" rotation="180" hflip="1" vflip="1" label="Fixed Voltage-4" idLabPos="-64,-24" labelrot="0" valLabPos="-16,8" valLabRot="0" Out="true" Voltage="5 V" />
+
+<item itemtype="MCU" CircId="mega328PB-5" mainComp="false" Show_id="true" Show_Val="false" Pos="692,804" rotation="0" hflip="1" vflip="1" label="mega328PB-5" idLabPos="0,-20" labelrot="0" valLabPos="-16,20" valLabRot="0" Frequency="16 MHz" Program=".pio/build/uno/firmware.hex" Auto_Load="false" Rst_enabled="true" Ext_Osc="false" Wdt_enabled="false" />
+
+<item itemtype="Connector" uid="Connector-6" startpinid="Ssd1306-2-PinSck" endpinid="mega328PB-5-PORTC5" pointList="740,764,740,796" />
+
+<item itemtype="Connector" uid="Connector-7" startpinid="Ssd1306-2-PinSda" endpinid="mega328PB-5-PORTC4" pointList="748,764,748,796" />
+
+<item itemtype="Connector" uid="Connector-8" startpinid="Potentiometer-3-PinB" endpinid="Ground-1-Gnd" pointList="832,844,832,888" />
+
+<item itemtype="Connector" uid="Connector-9" startpinid="Potentiometer-3-PinM" endpinid="mega328PB-5-PORTC0" pointList="816,828,788,828" />
+
+<item itemtype="Connector" uid="Connector-10" startpinid="Fixed Voltage-4-outnod" endpinid="Potentiometer-3-PinA" pointList="832,804,832,812" />
+
+</circuit>
