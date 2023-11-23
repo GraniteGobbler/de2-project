@@ -162,6 +162,6 @@ ISR(ADC_vect)
 {
     // Read converted value
     // Note that, register pair ADCH and ADCL can be read as a 16-bit value ADC
-    value = 5.0*ADC/1023.0; // Value converter for reading voltage in reference to AVCC = 5V
+    value = 5.0*ADC/1024.0; // Value converter for reading voltage in reference to AVCC = 5V
     
 }
