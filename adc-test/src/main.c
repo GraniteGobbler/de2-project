@@ -1,31 +1,26 @@
 /***********************************************************************
- * 
+ *
  * Use Analog-to-digital conversion to read push buttons on LCD keypad
  * shield and display it on LCD screen.
- * 
+ *
  * ATmega328P (Arduino Uno), 16 MHz, PlatformIO
  *
  * Copyright (c) 2018 Tomas Fryza
  * Dept. of Radio Electronics, Brno University of Technology, Czechia
  * This work is licensed under the terms of the MIT license.
- * 
+ *
  **********************************************************************/
 
-
 /* Includes ----------------------------------------------------------*/
-#include <avr/io.h>         // AVR device-specific IO definitions
-#include <avr/interrupt.h>  // Interrupts standard C library for AVR-GCC
-#include <stdlib.h>         // C library. Needed for number conversions
-#include <math.h>           // C library for math operations
+#include <avr/io.h>        // AVR device-specific IO definitions
+#include <avr/interrupt.h> // Interrupts standard C library for AVR-GCC
+#include <stdlib.h>        // C library. Needed for number conversions
+#include <math.h>          // C library for math operations
 
-#include "timer.h"          // Timer library for AVR-GCC
-#include <uart.h>           // Peter Fleury's UART library
-#include <oled.h>           // Peter Fleury's OLED library
+#include "timer.h" // Timer library for AVR-GCC
+#include <uart.h>  // Peter Fleury's UART library
+#include <oled.h>  // Peter Fleury's OLED library
 // #include <lcd.h>            // Peter Fleury's LCD library
-
-
-
-
 
 /* Function definitions ----------------------------------------------*/
 /**********************************************************************
@@ -36,40 +31,41 @@
  **********************************************************************/
 
 #ifndef F_CPU
-# define F_CPU 16000000  // CPU frequency in Hz required for UART_BAUD_SELECT
+#define F_CPU 16000000 // CPU frequency in Hz required for UART_BAUD_SELECT
 
 #endif
 
 // Global vars
-    float value;
-    float tenths;
-    float hundreds;
-    float thousands;
-    char Vstring[4];  // String for converted numbers by itoa()
-    char Tstring[4];
-    char Hstring[4];
-    char Thstring[4];
+float ADCvalue;
+float tenths;
+float hundreds;
+float thousands;
+char Vstring[4]; // String for converted numbers by itoa()
+char Tstring[4];
+char Hstring[4];
+char Thstring[4];
 
 int main(void)
 {
     // Configure Analog-to-Digital Converter unit
     // Select ADC voltage reference to "AVcc with external capacitor at AREF pin"
-    ADMUX |= (1<<REFS0);
+    ADMUX |= (1 << REFS0);
     // Select input channel ADC0 (voltage divider pin)
-    ADMUX &= ~(1<<MUX3 | 1<<MUX2 | 1<<MUX1 | 1<<MUX0);
+    ADMUX &= ~(1 << MUX3 | 1 << MUX2 | 1 << MUX1 | 1 << MUX0);
     // Enable ADC module
-    ADCSRA |= (1<<ADEN);
+    ADCSRA |= (1 << ADEN);
     // Enable conversion complete interrupt
-    ADCSRA |= (1<<ADIE);
+    ADCSRA |= (1 << ADIE);
     // Set clock prescaler to 128
     // ADCSRA = ADCSRA | (1<<ADPS2 | 1<<ADPS1 | 1<<ADPS0);
-    ADCSRA &= ~(1<<ADPS1 | 1<<ADPS0); ADCSRA |= (1<<ADPS2); // Prescaler set to 16. ADPS[2:0] = 100
+    // Prescaler set to 16. ADPS[2:0] = 100
+    ADCSRA &= ~(1 << ADPS1 | 1 << ADPS0); ADCSRA |= (1 << ADPS2); 
     // Enable ADC Auto Trigger Enable
-    ADCSRA |= (1<<ADATE);
+    ADCSRA |= (1 << ADATE);
     // Start Conversion
-    ADCSRA |= (1<<ADSC);
+    ADCSRA |= (1 << ADSC);
     // Set Free Running Mode as ADC Auto Trigger Source ADTS[2:0] = 000
-    ADCSRB &= ~(1<<ADTS2 | 1<<ADTS1 | 1<<ADTS0);    
+    ADCSRB &= ~(1 << ADTS2 | 1 << ADTS1 | 1 << ADTS0);
 
     uart_init(UART_BAUD_SELECT(115200, F_CPU));
     uart_puts("Init start\r\n");
@@ -98,68 +94,67 @@ int main(void)
     // Enables interrupts by setting the global interrupt mask
     sei();
 
-    uart_puts("Init end\r\n");  
+    uart_puts("Init end\r\n");
 
     oled_clrscr();
-    oled_gotoxy(6,3);
+    oled_gotoxy(6, 3);
     oled_puts("Voltage:");
-    oled_gotoxy(8,4);
+    oled_gotoxy(8, 4);
     oled_putc(',');
-    oled_gotoxy(12,4);
+    oled_gotoxy(12, 4);
     oled_putc('V');
 
     // Infinite loop
     while (1)
-    {   
-        int i;
-        for(i=0;i<3;i++)
-        {
-            value = 10.0*(value - floor(value));
-            itoa(value, Vstring, 10);
-
-            switch (i) {
-                case 0:
-                    oled_gotoxy(7,4);
-                    break;
-                case 1:
-                    oled_gotoxy(9,4);
-                    break;
-                case 2:
-                    oled_gotoxy(10,4);
-                    break;
-                case 3:
-                    oled_gotoxy(11,4);
-                    break;
-            }
-
-            oled_puts(Vstring);
-            uart_puts(Vstring); 
-        }
-
-
-        // tenths = 10.0*(value - floor(value));
-        // hundreds = 10.0 * (tenths - floor(tenths));
-        // thousands = 10.0 * (hundreds - floor(hundreds));
-
-        // itoa(value, Vstring, 10);
-        // itoa(tenths, Tstring, 10);
-        // itoa(hundreds, Hstring, 10);
-        // itoa(thousands, Thstring, 10);
-
-        // oled_gotoxy(7,4);
+    {
+        // itoa(ADCvalue, Vstring, 10);
+        // oled_gotoxy(7, 4);
         // oled_puts(Vstring);
-        // oled_gotoxy(9,4);
-        // oled_puts(Tstring);
-        // oled_gotoxy(10,4);
-        // oled_puts(Hstring);
-        // oled_gotoxy(11,4);
-        // oled_puts(Thstring);
+        // uart_puts(Vstring);
 
-        uart_puts(Vstring); 
+        // int i;
+        // for (i = 0; i < 3; i++)
+        // {
+        //     switch (i)
+        //     {
+        //     case 0:
+        //         oled_gotoxy(9, 4);
+        //     case 1:
+        //         oled_gotoxy(10, 4);
+        //     case 2:
+        //         oled_gotoxy(11, 4);
+        //     }
+
+        //     ADCvalue = 10.0 * (ADCvalue - floor(ADCvalue));
+        //     itoa(ADCvalue, Vstring, 10);
+
+        //     oled_puts(Vstring);
+        //     uart_puts(Vstring);
+        // }
+
+        tenths = 10.0*(ADCvalue - floor(ADCvalue));
+        hundreds = 10.0 * (tenths - floor(tenths));
+        thousands = 10.0 * (hundreds - floor(hundreds));
+
+        itoa(ADCvalue, Vstring, 10);
+        itoa(tenths, Tstring, 10);
+        itoa(hundreds, Hstring, 10);
+        itoa(thousands, Thstring, 10);
+
+        oled_gotoxy(7,4);
+        oled_puts(Vstring);
+        oled_gotoxy(9,4);
+        oled_puts(Tstring);
+        oled_gotoxy(10,4);
+        oled_puts(Hstring);
+        oled_gotoxy(11,4);
+        oled_puts(Thstring);
+
+        uart_puts(Vstring);
         uart_putc(',');
-        uart_puts(Tstring); 
+        uart_puts(Tstring);
         uart_puts(Hstring);
-        uart_puts(Thstring); 
+        uart_puts(Thstring);
         uart_puts("V\r\n");
 
         oled_display();
@@ -188,6 +183,5 @@ ISR(ADC_vect)
 {
     // Read converted value
     // Note that, register pair ADCH and ADCL can be read as a 16-bit value ADC
-    value = 5.0*ADC/1024.0; // Value converter for reading voltage in reference to AVCC = 5V
-    
+    ADCvalue = 5.0 * ADC / 1024.0; // Value converter for reading voltage in reference to AVCC = 5V
 }
