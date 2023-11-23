@@ -111,23 +111,49 @@ int main(void)
     // Infinite loop
     while (1)
     {   
-        tenths = 10.0*(value - floor(value));
-        hundreds = 10.0 * (tenths - floor(tenths));
-        thousands = 10.0 * (hundreds - floor(hundreds));
+        int i;
+        for(i=0;i<3;i++)
+        {
+            value = 10.0*(value - floor(value));
+            itoa(value, Vstring, 10);
 
-        itoa(value, Vstring, 10);
-        itoa(tenths, Tstring, 10);
-        itoa(hundreds, Hstring, 10);
-        itoa(thousands, Thstring, 10);
+            switch (i) {
+                case 0:
+                    oled_gotoxy(7,4);
+                    break;
+                case 1:
+                    oled_gotoxy(9,4);
+                    break;
+                case 2:
+                    oled_gotoxy(10,4);
+                    break;
+                case 3:
+                    oled_gotoxy(11,4);
+                    break;
+            }
 
-        oled_gotoxy(7,4);
-        oled_puts(Vstring);
-        oled_gotoxy(9,4);
-        oled_puts(Tstring);
-        oled_gotoxy(10,4);
-        oled_puts(Hstring);
-        oled_gotoxy(11,4);
-        oled_puts(Thstring);
+            oled_puts(Vstring);
+            uart_puts(Vstring); 
+        }
+
+
+        // tenths = 10.0*(value - floor(value));
+        // hundreds = 10.0 * (tenths - floor(tenths));
+        // thousands = 10.0 * (hundreds - floor(hundreds));
+
+        // itoa(value, Vstring, 10);
+        // itoa(tenths, Tstring, 10);
+        // itoa(hundreds, Hstring, 10);
+        // itoa(thousands, Thstring, 10);
+
+        // oled_gotoxy(7,4);
+        // oled_puts(Vstring);
+        // oled_gotoxy(9,4);
+        // oled_puts(Tstring);
+        // oled_gotoxy(10,4);
+        // oled_puts(Hstring);
+        // oled_gotoxy(11,4);
+        // oled_puts(Thstring);
 
         uart_puts(Vstring); 
         uart_putc(',');
