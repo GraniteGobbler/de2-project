@@ -8,18 +8,68 @@
 
 <item itemtype="Push" CircId="Push-199" mainComp="false" Show_id="false" Show_Val="false" Pos="-172,124" rotation="0" hflip="1" vflip="1" label="Push-199" idLabPos="-12,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Norm_Close="false" Poles="1 _Poles" />
 
-<item itemtype="Potentiometer" CircId="Potentiometer-411" mainComp="false" ShowProp="Resistance" Show_id="false" Show_Val="true" Pos="-4,148" rotation="90" hflip="1" vflip="1" label="Potentiometer-411" idLabPos="-16,-40" labelrot="0" valLabPos="15,-20" valLabRot="0" Resistance="1000 Ω" Value_Ohm="564 Ω" />
+<item itemtype="Fixed Voltage" CircId="Fixed Voltage-482" mainComp="false" Show_id="false" Show_Val="false" Pos="-4,28" rotation="90" hflip="1" vflip="1" label="Fixed Voltage-482" idLabPos="-64,-24" labelrot="0" valLabPos="-16,8" valLabRot="0" Out="true" Voltage="5 V" />
 
-<item itemtype="Fixed Voltage" CircId="Fixed Voltage-482" mainComp="false" Show_id="false" Show_Val="false" Pos="-4,100" rotation="90" hflip="1" vflip="1" label="Fixed Voltage-482" idLabPos="-64,-24" labelrot="0" valLabPos="-16,8" valLabRot="0" Out="true" Voltage="5 V" />
+<item itemtype="Push" CircId="Push-491" mainComp="false" Show_id="false" Show_Val="false" Pos="-36,212" rotation="0" hflip="1" vflip="1" label="Push-491" idLabPos="-12,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Norm_Close="false" Poles="2 _Poles" />
 
-<item itemtype="Connector" uid="connector-465" startpinid="Uno-192-RST" endpinid="Push-199-switch0pinN" pointList="-140,108,-156,108,-156,124" />
+<item itemtype="Capacitor" CircId="Capacitor-499" mainComp="false" ShowProp="Capacitance" Show_id="false" Show_Val="true" Pos="-4,164" rotation="90" hflip="1" vflip="1" label="Capacitor-499" idLabPos="-16,-24" labelrot="0" valLabPos="-16.278,6" valLabRot="0" Capacitance="100 µF" Resistance="1e-06 Ω" InitVolt="0 V" AutoStep="0 _Steps" />
 
-<item itemtype="Connector" uid="connector-466" startpinid="Push-199-pinP0" endpinid="Ground-10-Gnd" pointList="-188,124,-196,124,-196,140" />
+<item itemtype="Resistor" CircId="Resistor-501" mainComp="false" ShowProp="Resistance" Show_id="false" Show_Val="true" Pos="-4,116" rotation="90" hflip="1" vflip="1" label="Resistor-501" idLabPos="-16,-24" labelrot="0" valLabPos="-16,6" valLabRot="0" Resistance="10000 Ω" />
 
-<item itemtype="Connector" uid="connector-469" startpinid="Uno-192-GND2" endpinid="Potentiometer-411-PinB" pointList="-140,260,-148,260,-148,276,-4,276,-4,164" />
+<item itemtype="Switch" CircId="Switch-508" mainComp="false" Show_id="false" Show_Val="false" Pos="-4,68" rotation="450" hflip="1" vflip="1" label="Switch-508" idLabPos="-12,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Norm_Close="false" DT="false" Poles="1 _Poles" />
 
-<item itemtype="Connector" uid="Connector-484" startpinid="Potentiometer-411-PinM" endpinid="Uno-192-A0" pointList="-20,148,-76,148" />
+<item itemtype="RelaySPST" CircId="RelaySPST-530" mainComp="false" Show_id="false" Show_Val="false" Pos="36,164" rotation="270" hflip="1" vflip="1" label="RelaySPST-530" idLabPos="-16,8" labelrot="0" valLabPos="-16,6" valLabRot="0" Norm_Close="true" DT="false" Poles="1 _Poles" IOn="0.02 A" IOff="0.01 A" Inductance="0 H" Rcoil="100 Ω" AutoStep="0 _Steps" />
 
-<item itemtype="Connector" uid="Connector-485" startpinid="Potentiometer-411-PinA" endpinid="Fixed Voltage-482-outnod" pointList="-4,132,-4,116" />
+<item itemtype="Node" CircId="Node-528" mainComp="false" Pos="-4,140" />
+
+<item itemtype="Node" CircId="Node-532" mainComp="false" Pos="-4,136" />
+
+<item itemtype="Node" CircId="Node-535" mainComp="false" Pos="-4,188" />
+
+<item itemtype="Node" CircId="Node-539" mainComp="false" Pos="-4,196" />
+
+<item itemtype="Node" CircId="Node-541" mainComp="false" Pos="-4,92" />
+
+<item itemtype="Node" CircId="Node-546" mainComp="false" Pos="-52,276" />
+
+<item itemtype="Connector" uid="connector-512" startpinid="Push-199-pinP0" endpinid="Ground-10-Gnd" pointList="-188,124,-196,124,-196,140" />
+
+<item itemtype="Connector" uid="connector-513" startpinid="Uno-192-RST" endpinid="Push-199-switch0pinN" pointList="-140,108,-156,108,-156,124" />
+
+<item itemtype="Connector" uid="connector-516" startpinid="Resistor-501-rPin" endpinid="Node-532-0" pointList="-4,132,-4,136" />
+
+<item itemtype="Connector" uid="connector-519" startpinid="Switch-508-pinP0" endpinid="Fixed Voltage-482-outnod" pointList="-4,52,-4,44" />
+
+<item itemtype="Connector" uid="connector-520" startpinid="Resistor-501-lPin" endpinid="Node-541-0" pointList="-4,100,-4,92" />
+
+<item itemtype="Connector" uid="Connector-527" startpinid="Uno-192-A0" endpinid="Node-528-1" pointList="-76,148,-28,148,-28,140,-4,140" />
+
+<item itemtype="Connector" uid="connector-517" startpinid="Capacitor-499-rPin" endpinid="Node-535-0" pointList="-4,180,-4,188" />
+
+<item itemtype="Connector" uid="Connector-529" startpinid="Node-528-2" endpinid="Capacitor-499-lPin" pointList="-4,140,-4,148" />
+
+<item itemtype="Connector" uid="Connector-531" startpinid="RelaySPST-530-switch0pinN" endpinid="Node-532-1" pointList="20,148,20,136,-4,136" />
+
+<item itemtype="Connector" uid="Connector-533" startpinid="Node-532-2" endpinid="Node-528-0" pointList="-4,136,-4,140" />
+
+<item itemtype="Connector" uid="Connector-534" startpinid="RelaySPST-530-pinP2" endpinid="Node-535-1" pointList="20,180,20,188,-4,188" />
+
+<item itemtype="Connector" uid="connector-515" startpinid="Uno-192-GND2" endpinid="Node-546-0" pointList="-140,260,-148,260,-148,276,-52,276" />
+
+<item itemtype="Connector" uid="Connector-537" startpinid="Uno-192-8" endpinid="Push-491-pinP2" pointList="-76,196,-52,196" />
+
+<item itemtype="Connector" uid="Connector-538" startpinid="Push-491-switch1pinN" endpinid="Node-539-1" pointList="-20,196,-4,196" />
+
+<item itemtype="Connector" uid="Connector-540" startpinid="Node-539-2" endpinid="Node-535-2" pointList="-4,196,-4,188" />
+
+<item itemtype="Connector" uid="Connector-542" startpinid="Node-541-2" endpinid="Switch-508-switch0pinN" pointList="-4,92,-4,84" />
+
+<item itemtype="Connector" uid="Connector-543" startpinid="Node-541-1" endpinid="RelaySPST-530-inductor-rPin" pointList="-4,92,36,92,36,148" />
+
+<item itemtype="Connector" uid="Connector-544" startpinid="RelaySPST-530-inductor-lPin" endpinid="Push-491-switch0pinN" pointList="36,180,36,212,-20,212" />
+
+<item itemtype="Connector" uid="Connector-545" startpinid="Push-491-pinP0" endpinid="Node-546-1" pointList="-52,212,-52,276" />
+
+<item itemtype="Connector" uid="Connector-547" startpinid="Node-546-2" endpinid="Node-539-0" pointList="-52,276,-4,276,-4,196" />
 
 </circuit>

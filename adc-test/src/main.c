@@ -15,6 +15,7 @@
 #include <avr/io.h>        // AVR device-specific IO definitions
 #include <avr/interrupt.h> // Interrupts standard C library for AVR-GCC
 #include <stdlib.h>        // C library. Needed for number conversions
+#include <stdio.h>  
 #include <math.h>          // C library for math operations
 
 #include "timer.h" // Timer library for AVR-GCC
@@ -31,7 +32,8 @@
  * Returns:  none
  **********************************************************************/
 
-#define Start_button PB5   // PB5 is start button for C measurement
+// #define Start_button PB5   // PB5 is start button for C measurement
+#define Start_button PB0   // PB5 is start button for C measurement
 #define Measure_trig PD7  // PD7 is measurement trigger pin for C measurement
 #ifndef F_CPU
 #define F_CPU 16000000 // CPU frequency in Hz required for UART_BAUD_SELECT
@@ -40,6 +42,7 @@
 // Global vars
 float ADCvalue;
 double tim0_ovf_count = 0;
+double stoUS_counter = 0;
 
 int main(void)
 {
@@ -152,26 +155,45 @@ int main(void)
         //     uart_puts(Vstring);
         // }
 
-        if(GPIO_read(&PORTB,Start_button) == 0)
+        if(GPIO_read(&PINB,Start_button) == 0)
         {   
+            uart_puts("Meranie dapacity... \r\n");
             tim0_ovf_count = 0;
+            stoUS_counter = 0;
             float tau = 0.0;
             double Rval = 10000.0;
             double Cval = 0.0;
-            char Cstr[4];
+            char Cstr[32];
+            // char bom[32];
+
 
             
             // GPIO_write_high(&PORTD,Measure_trig); // Reset cap voltage
             GPIO_write_low(&PORTD,Measure_trig); // Start cap measurement
             
-            while(ADCvalue <= 0.628*5.0){}
+            while(ADCvalue <= 0.628*5.0)
+            {
+                // tau = tim0_ovf_count*16.0*pow(10,-6)*1.6;
+                // sprintf(bom, "counter: %.9f", tau);
+                // uart_puts(bom);
+                uart_puts(" \r\n");
 
-            tau = tim0_ovf_count*16.0*pow(10,-6);
-            Cval = 1000000 * Rval * tau;
+            }
 
-            itoa(Cval, Cstr, 10);
-            oled_gotoxy(7,3);
-            oled_puts(Cstr);
+            // tau = tim0_ovf_count*16.0*1.6/1000000;
+            tau = stoUS_counter/1000000;
+            Cval = Rval * tau;
+
+            // itoa(Cval, Cstr, 10);
+            // oled_gotoxy(7,3);
+            // oled_puts(Cstr);
+            
+            uart_puts("Dapacita odmerana\r\n");
+            sprintf(Cstr, "Vysledok: %.2f", Cval);
+            uart_puts(Cstr);
+            uart_puts("F\r\n");
+
+            
 
         }
 
@@ -214,6 +236,13 @@ int main(void)
 ISR(TIMER0_OVF_vect)
 {
     tim0_ovf_count++;
+    if (tim0_ovf_count == 6)
+    {
+        stoUS_counter++;
+        tim0_ovf_count = 0;
+
+    }
+
 }
 
 /**********************************************************************
