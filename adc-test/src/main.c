@@ -18,8 +18,9 @@
 #include <math.h>          // C library for math operations
 
 #include "timer.h" // Timer library for AVR-GCC
+#include <gpio.h>  // 
 #include <uart.h>  // Peter Fleury's UART library
-#include <oled.h>  // Peter Fleury's OLED library
+#include <oled.h>  // 
 // #include <lcd.h>            // Peter Fleury's LCD library
 
 /* Function definitions ----------------------------------------------*/
@@ -30,20 +31,15 @@
  * Returns:  none
  **********************************************************************/
 
+#define Start_button PB5   // PB5 is start button for C measurement
+#define Measure_trig PD7  // PD7 is measurement trigger pin for C measurement
 #ifndef F_CPU
 #define F_CPU 16000000 // CPU frequency in Hz required for UART_BAUD_SELECT
-
 #endif
 
 // Global vars
 float ADCvalue;
-float tenths;
-float hundreds;
-float thousands;
-char Vstring[4]; // String for converted numbers by itoa()
-char Tstring[4];
-char Hstring[4];
-char Thstring[4];
+double tim0_ovf_count = 0;
 
 int main(void)
 {
@@ -66,7 +62,14 @@ int main(void)
     ADCSRA |= (1 << ADSC);
     // Set Free Running Mode as ADC Auto Trigger Source ADTS[2:0] = 000
     ADCSRB &= ~(1 << ADTS2 | 1 << ADTS1 | 1 << ADTS0);
+    // Set GPIO input pins
+    GPIO_mode_input_pullup(&DDRB, Start_button);
 
+
+
+
+
+    // INIT
     uart_init(UART_BAUD_SELECT(115200, F_CPU));
     uart_puts("Init start\r\n");
 
@@ -96,17 +99,34 @@ int main(void)
 
     uart_puts("Init end\r\n");
 
+
     oled_clrscr();
-    oled_gotoxy(6, 3);
+    oled_gotoxy(6, 0);
     oled_puts("Voltage:");
-    oled_gotoxy(8, 4);
+    oled_gotoxy(8, 1);
     oled_putc(',');
-    oled_gotoxy(12, 4);
+    oled_gotoxy(12, 1);
     oled_putc('V');
+
+    oled_gotoxy(3, 2);
+    oled_puts("Capacitance:");
+    oled_gotoxy(8, 3);
+    oled_putc(',');
+    oled_gotoxy(12, 3);
+    oled_puts("uF");
+    oled_display();
 
     // Infinite loop
     while (1)
     {
+        float tenths;
+        float hundreds;
+        float thousands;
+        char Vstring[4]; // String for converted numbers by itoa()
+        char Tstring[4];
+        char Hstring[4];
+        char Thstring[4];
+
         // itoa(ADCvalue, Vstring, 10);
         // oled_gotoxy(7, 4);
         // oled_puts(Vstring);
@@ -132,6 +152,29 @@ int main(void)
         //     uart_puts(Vstring);
         // }
 
+        if(GPIO_read(&PORTB,Start_button) == 0)
+        {   
+            tim0_ovf_count = 0;
+            float tau = 0.0;
+            double Rval = 10000.0;
+            double Cval = 0.0;
+            char Cstr[4];
+
+            
+            // GPIO_write_high(&PORTD,Measure_trig); // Reset cap voltage
+            GPIO_write_low(&PORTD,Measure_trig); // Start cap measurement
+            
+            while(ADCvalue <= 0.628*5.0){}
+
+            tau = tim0_ovf_count*16.0*pow(10,-6);
+            Cval = 1000000 * Rval * tau;
+
+            itoa(Cval, Cstr, 10);
+            oled_gotoxy(7,3);
+            oled_puts(Cstr);
+
+        }
+
         tenths = 10.0*(ADCvalue - floor(ADCvalue));
         hundreds = 10.0 * (tenths - floor(tenths));
         thousands = 10.0 * (hundreds - floor(hundreds));
@@ -141,13 +184,13 @@ int main(void)
         itoa(hundreds, Hstring, 10);
         itoa(thousands, Thstring, 10);
 
-        oled_gotoxy(7,4);
+        oled_gotoxy(7,1);
         oled_puts(Vstring);
-        oled_gotoxy(9,4);
+        oled_gotoxy(9,1);
         oled_puts(Tstring);
-        oled_gotoxy(10,4);
+        oled_gotoxy(10,1);
         oled_puts(Hstring);
-        oled_gotoxy(11,4);
+        oled_gotoxy(11,1);
         oled_puts(Thstring);
 
         uart_puts(Vstring);
@@ -170,9 +213,7 @@ int main(void)
  **********************************************************************/
 ISR(TIMER0_OVF_vect)
 {
-    // Start ADC conversion
-    // ADCSRA = ADCSRA | (1<<ADSC);
-    // uart_puts("ADC conv\r\n");
+    tim0_ovf_count++;
 }
 
 /**********************************************************************
