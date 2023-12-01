@@ -34,7 +34,8 @@
 
 #define Start_button PD2   // PD2 is start button for C measurement
 #define Stop_button PD3   // PD3 is stop button for C measurement
-// #define Gate_ON PD7  // PD7 is measurement trigger pin for C measurement
+#define Base_ON PD7  // PD7 is measurement trigger pin for C measurement
+
 #ifndef F_CPU
 #define F_CPU 16000000 // CPU frequency in Hz required for UART_BAUD_SELECT
 
@@ -55,17 +56,17 @@ int main(void)
     // Enable conversion complete interrupt
     ADCSRA |= (1 << ADIE);
     // Set clock prescaler to 128
-    // ADCSRA = ADCSRA | (1<<ADPS2 | 1<<ADPS1 | 1<<ADPS0);
+    ADCSRA = ADCSRA | (1<<ADPS2 | 1<<ADPS1 | 1<<ADPS0);
     // Prescaler set to 16. ADPS[2:0] = 100
-    ADCSRA &= ~(1 << ADPS1 | 1 << ADPS0); ADCSRA |= (1 << ADPS2); 
+    // ADCSRA &= ~(1 << ADPS1 | 1 << ADPS0); ADCSRA |= (1 << ADPS2); 
     // Enable ADC Auto Trigger Enable
     // ADCSRA |= (1 << ADATE);
     // Set Free Running Mode as ADC Auto Trigger Source ADTS[2:0] = 000
     // ADCSRB &= ~(1 << ADTS2 | 1 << ADTS1 | 1 << ADTS0);
     
     // Set GPIO input pins
-    GPIO_mode_input_pullup(&DDRD, Start_button);
-    GPIO_mode_input_pullup(&DDRD, Stop_button);
+    // GPIO_mode_input_pullup(&DDRD, Start_button);
+    // GPIO_mode_input_pullup(&DDRD, Stop_button);
 
 
     //    INIT    //
@@ -74,14 +75,15 @@ int main(void)
 
     oled_init(OLED_DISP_ON); // Initialize OLED
     oled_clrscr();
-    oled_set_contrast(25); // Contrast setting
+    oled_set_contrast(255); // Contrast setting
+    oled_invert(1);
     
     oled_charMode(DOUBLESIZE);
-    oled_puts("BTRY Meter");
+    oled_puts("BATT Meter");
     // oled_gotoxy(5, 2);  oled_puts("Meter");
 
     // oled_drawLine(x1, y1, x2, y2, color)
-    oled_drawLine(0, 15, 120, 15, WHITE);
+    oled_drawLine(0, 15, 128, 15, WHITE);
 
     oled_charMode(NORMALSIZE);
     oled_gotoxy(0, 3);  oled_puts("Voltage:  _.___ V");
@@ -105,9 +107,15 @@ int main(void)
 
     // Vars in while loop
     uint8_t isStarted = 0;
+    
     float Voltage = 0.0;
-    char cVolt[16];
+    float Voltage_unloaded = 0.0;
+    float Current = 0.0;
+    float R_circ = 1.11265; // Total circuit resistance
+    float R_bat = 0.0; // Internal resistance of battery - !needs to be calculated after some time!
 
+    char cVolt[16];
+    char cCurr[16];
 
 
     // Infinite loop
@@ -118,6 +126,13 @@ int main(void)
             uart_puts("Start button pressed!\r\n");
             oled_gotoxy(0, 7);  oled_puts("                   "); // Clear 7th row
 
+            Voltage_unloaded = ADC_A0;  // Snapshot of unloaded voltage of battery
+            
+            sprintf(cVolt, "%.3f", fabs(Voltage_unloaded));                           
+            uart_puts("Unloaded Voltage: ");
+            uart_puts(cVolt);
+            uart_puts("\r\n");
+
             isStarted = 1;
         }
 
@@ -125,7 +140,8 @@ int main(void)
         {
             uart_puts("Stop button pressed!\r\n");
             oled_gotoxy(0, 7);  oled_puts("Press RED to start!");
-            oled_gotoxy(10,3);  oled_puts("_.___");
+            oled_gotoxy(9,3);  oled_puts(" _.___ V");
+            oled_gotoxy(9,4);  oled_puts(" _.___ A");
             
             isStarted = 0;
         }
@@ -133,50 +149,42 @@ int main(void)
         if (isStarted == 1)
         {
             Voltage = ADC_A0;
-            sprintf(cVolt, "%.3f", Voltage);
-            oled_gotoxy(10,3); oled_puts(cVolt);
+            Current = Voltage/(R_circ + R_bat);
+
+            if (floor(Voltage) == 0.0)
+            {
+                oled_gotoxy(9,3);   oled_putc(' ');
+                oled_gotoxy(9,4);   oled_putc(' ');
+            }
+            else if ((Voltage * -1) == fabs(Voltage))
+            {
+                oled_gotoxy(9,3);   oled_putc('-');
+                oled_gotoxy(9,4);   oled_putc('-');
+            }
+            else
+            {
+                oled_gotoxy(9,3);   oled_putc(' ');
+                oled_gotoxy(9,4);   oled_putc(' ');
+            }
+            
+            sprintf(cVolt, "%.3f", fabs(Voltage));
+            sprintf(cCurr, "%.3f", fabs(Current));                 
+            oled_gotoxy(10,3);   oled_puts(cVolt);
+            oled_gotoxy(10,4);   oled_puts(cCurr);
+           
+            uart_puts("Voltage: ");
             uart_puts(cVolt);
             uart_puts("\r\n");
 
+            uart_puts("Current: ");
+            uart_puts(cCurr);
+            uart_puts("\r\n");
         }
 
 
         oled_display();
 
-        // float tenths;
-        // float hundreds;
-        // float thousands;
-        // char Vstring[4]; // String for converted numbers by itoa()
-        // char Tstring[4];
-        // char Hstring[4];
-        // char Thstring[4];
-
-        // tenths = 10.0*(Uvalue - floor(Uvalue));
-        // hundreds = 10.0 * (tenths - floor(tenths));
-        // thousands = 10.0 * (hundreds - floor(hundreds));
-
-        // itoa(Uvalue, Vstring, 10);
-        // itoa(tenths, Tstring, 10);
-        // itoa(hundreds, Hstring, 10);
-        // itoa(thousands, Thstring, 10);
-
-        // oled_gotoxy(7,1);
-        // oled_puts(Vstring);
-        // oled_gotoxy(9,1);
-        // oled_puts(Tstring);
-        // oled_gotoxy(10,1);
-        // oled_puts(Hstring);
-        // oled_gotoxy(11,1);
-        // oled_puts(Thstring);
-
-        // uart_puts(Vstring);
-        // uart_putc(',');
-        // uart_puts(Tstring);
-        // uart_puts(Hstring);
-        // uart_puts(Thstring);
-        // uart_puts("V\r\n");
-
-        // oled_display();
+        
     }
     // Will never reach this
     return 0;
@@ -189,8 +197,7 @@ int main(void)
  **********************************************************************/
 ISR(TIMER1_OVF_vect)
 {
-    // Start Conversion
-    ADCSRA |= (1 << ADSC);
+    ADCSRA |= (1 << ADSC); // Start Conversion
 }
 
 
@@ -200,8 +207,5 @@ ISR(TIMER1_OVF_vect)
  **********************************************************************/
 ISR(ADC_vect)
 {
-    // Read converted value
-    // Note that, register pair ADCH and ADCL can be read as a 16-bit value ADC
-    ADC_A0 = 5.0 * ADC / 1024.0; // Value converter for reading voltage in reference to AVCC = 5V
-    // Ivalue = (5.0 * ADC / 1024.0)*0.05;
+    ADC_A0 = 5.0 * ADC / 1023.0; // Value converter for reading voltage in reference to AVCC = 5V   
 }
