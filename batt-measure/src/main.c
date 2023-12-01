@@ -32,8 +32,8 @@
  * Returns:  none
  **********************************************************************/
 
-// #define Start_button PB5   // PB5 is start button for C measurement
-// #define Start_button PB0   // PB5 is start button for C measurement
+#define Start_button PD2   // PD2 is start button for C measurement
+#define Stop_button PD3   // PD3 is stop button for C measurement
 // #define Gate_ON PD7  // PD7 is measurement trigger pin for C measurement
 #ifndef F_CPU
 #define F_CPU 16000000 // CPU frequency in Hz required for UART_BAUD_SELECT
@@ -41,12 +41,7 @@
 #endif
 
 // Global vars
-float Uvalue;
-float Ivalue;
-float mAs;
-//double tim0_ovf_count = 0;
-//double stoUS_counter = 0;
-uint16_t voltage, current;
+float ADC_A0; // Analog pin A0 voltage
 
 int main(void)
 {
@@ -64,35 +59,35 @@ int main(void)
     // Prescaler set to 16. ADPS[2:0] = 100
     ADCSRA &= ~(1 << ADPS1 | 1 << ADPS0); ADCSRA |= (1 << ADPS2); 
     // Enable ADC Auto Trigger Enable
-    ADCSRA |= (1 << ADATE);
-    // Start Conversion
-    ADCSRA |= (1 << ADSC);
+    // ADCSRA |= (1 << ADATE);
     // Set Free Running Mode as ADC Auto Trigger Source ADTS[2:0] = 000
-    ADCSRB &= ~(1 << ADTS2 | 1 << ADTS1 | 1 << ADTS0);
+    // ADCSRB &= ~(1 << ADTS2 | 1 << ADTS1 | 1 << ADTS0);
     
     // Set GPIO input pins
-    // GPIO_mode_input_pullup(&DDRB, Start_button);
+    GPIO_mode_input_pullup(&DDRD, Start_button);
+    GPIO_mode_input_pullup(&DDRD, Stop_button);
 
 
-    // INIT
+    //    INIT    //
     uart_init(UART_BAUD_SELECT(115200, F_CPU));
     uart_puts("Init start\r\n");
 
-    // Initialize OLED
-    oled_init(OLED_DISP_ON);
+    oled_init(OLED_DISP_ON); // Initialize OLED
     oled_clrscr();
     oled_set_contrast(25); // Contrast setting
-    // oled_drawLine(x1, y1, x2, y2, color)
-    oled_drawLine(0, 32, 120, 32, WHITE);
-
+    
     oled_charMode(DOUBLESIZE);
-    oled_gotoxy(3, 0);  oled_puts("Battery");
-    oled_gotoxy(5, 2);  oled_puts("Meter");
+    oled_puts("BTRY Meter");
+    // oled_gotoxy(5, 2);  oled_puts("Meter");
+
+    // oled_drawLine(x1, y1, x2, y2, color)
+    oled_drawLine(0, 15, 120, 15, WHITE);
 
     oled_charMode(NORMALSIZE);
-    oled_gotoxy(6, 5);  oled_puts("Voltage:");
-    oled_gotoxy(8, 6);  oled_putc(',');
-    oled_gotoxy(12, 6); oled_putc('V');
+    oled_gotoxy(0, 3);  oled_puts("Voltage:  _.___ V");
+    oled_gotoxy(0, 4);  oled_puts("Current:  _.___ A");
+    oled_gotoxy(0, 5);  oled_puts("Capacity: _.___ mAh");
+    oled_gotoxy(0, 7);  oled_puts("Press RED to start!"); 
 
     oled_display();
 
@@ -105,23 +100,49 @@ int main(void)
     sei();
 
     uart_puts("Init end\r\n");
+    //    END INIT    //
 
 
-    
-
-    // oled_gotoxy(3, 2);
-    // oled_puts("Capacitance:");
-    // oled_gotoxy(8, 3);
-    // oled_putc(',');
-    // oled_gotoxy(12, 3);
-    // oled_puts("mAh");
-    // oled_display();
+    // Vars in while loop
+    uint8_t isStarted = 0;
+    float Voltage = 0.0;
+    char cVolt[16];
 
 
 
     // Infinite loop
     while (1)
     {
+        if (GPIO_read(&PIND, Start_button) == 0)
+        {
+            uart_puts("Start button pressed!\r\n");
+            oled_gotoxy(0, 7);  oled_puts("                   "); // Clear 7th row
+
+            isStarted = 1;
+        }
+
+        if ((GPIO_read(&PIND, Stop_button) == 0) & (isStarted == 1))
+        {
+            uart_puts("Stop button pressed!\r\n");
+            oled_gotoxy(0, 7);  oled_puts("Press RED to start!");
+            oled_gotoxy(10,3);  oled_puts("_.___");
+            
+            isStarted = 0;
+        }
+
+        if (isStarted == 1)
+        {
+            Voltage = ADC_A0;
+            sprintf(cVolt, "%.3f", Voltage);
+            oled_gotoxy(10,3); oled_puts(cVolt);
+            uart_puts(cVolt);
+            uart_puts("\r\n");
+
+        }
+
+
+        oled_display();
+
         // float tenths;
         // float hundreds;
         // float thousands;
@@ -166,21 +187,21 @@ int main(void)
  * Function: Timer/Counter1 overflow interrupt
  * Purpose:  Use Single Conversion mode and start conversion every 100 ms.
  **********************************************************************/
+ISR(TIMER1_OVF_vect)
+{
+    // Start Conversion
+    ADCSRA |= (1 << ADSC);
+}
 
 
 /**********************************************************************
  * Function: ADC complete interrupt
  * Purpose:  Display converted value on LCD screen.
  **********************************************************************/
-ISR(TIMER1_OVF_vect)
-{
-
-}
-
 ISR(ADC_vect)
 {
     // Read converted value
     // Note that, register pair ADCH and ADCL can be read as a 16-bit value ADC
-    //Uvalue = 5.0 * ADC / 1024.0; // Value converter for reading voltage in reference to AVCC = 5V
+    ADC_A0 = 5.0 * ADC / 1024.0; // Value converter for reading voltage in reference to AVCC = 5V
     // Ivalue = (5.0 * ADC / 1024.0)*0.05;
 }
