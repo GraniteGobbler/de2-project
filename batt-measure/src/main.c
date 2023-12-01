@@ -22,7 +22,6 @@
 #include <gpio.h>  // 
 #include <uart.h>  // Peter Fleury's UART library
 #include <oled.h>  // 
-// #include <lcd.h>            // Peter Fleury's LCD library
 
 /* Function definitions ----------------------------------------------*/
 /**********************************************************************
