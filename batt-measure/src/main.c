@@ -68,7 +68,7 @@ int main(void)
     // GPIO_mode_input_pullup(&DDRD, Stop_button);
 
 
-    //    INIT    //
+    ////  INIT  ////
     uart_init(UART_BAUD_SELECT(115200, F_CPU));
     uart_puts("Init start\r\n");
 
@@ -101,7 +101,7 @@ int main(void)
     sei();
 
     uart_puts("Init end\r\n");
-    //    END INIT    //
+    ////  END INIT  ////
 
 
     // Vars in while loop
@@ -113,8 +113,8 @@ int main(void)
     float R_circ = 1.11265; // Total circuit resistance
     float R_bat = 0.0; // Internal resistance of battery - !needs to be calculated after some time!
 
-    char cVolt[16];
-    char cCurr[16];
+    char cVolt[8];
+    char cCurr[8];
 
 
     // Infinite loop
@@ -198,7 +198,6 @@ ISR(TIMER1_OVF_vect)
 {
     ADCSRA |= (1 << ADSC); // Start Conversion
 }
-
 
 /**********************************************************************
  * Function: ADC complete interrupt
