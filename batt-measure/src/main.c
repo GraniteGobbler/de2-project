@@ -33,10 +33,11 @@
  **********************************************************************/
 
 // #define Start_button PB5   // PB5 is start button for C measurement
-#define Start_button PB0   // PB5 is start button for C measurement
-#define Gate_ON PD7  // PD7 is measurement trigger pin for C measurement
+// #define Start_button PB0   // PB5 is start button for C measurement
+// #define Gate_ON PD7  // PD7 is measurement trigger pin for C measurement
 #ifndef F_CPU
 #define F_CPU 16000000 // CPU frequency in Hz required for UART_BAUD_SELECT
+
 #endif
 
 // Global vars
@@ -70,7 +71,7 @@ int main(void)
     ADCSRB &= ~(1 << ADTS2 | 1 << ADTS1 | 1 << ADTS0);
     
     // Set GPIO input pins
-    GPIO_mode_input_pullup(&DDRB, Start_button);
+    // GPIO_mode_input_pullup(&DDRB, Start_button);
 
 
     // INIT
@@ -80,16 +81,18 @@ int main(void)
     // Initialize OLED
     oled_init(OLED_DISP_ON);
     oled_clrscr();
-    oled_charMode(DOUBLESIZE);
-    oled_puts("Multimeter");
-    oled_charMode(NORMALSIZE);
-    // oled_gotoxy(x, y)
-    oled_gotoxy(0, 2);
-    oled_puts("128x64, SHH1106");
+    oled_set_contrast(25); // Contrast setting
     // oled_drawLine(x1, y1, x2, y2, color)
-    oled_drawLine(0, 25, 120, 25, WHITE);
-    oled_gotoxy(0, 4);
-    oled_puts("AVR course, Brno");
+    oled_drawLine(0, 32, 120, 32, WHITE);
+
+    oled_charMode(DOUBLESIZE);
+    oled_gotoxy(3, 0);  oled_puts("Battery");
+    oled_gotoxy(5, 2);  oled_puts("Meter");
+
+    oled_charMode(NORMALSIZE);
+    oled_gotoxy(6, 5);  oled_puts("Voltage:");
+    oled_gotoxy(8, 6);  oled_putc(',');
+    oled_gotoxy(12, 6); oled_putc('V');
 
     oled_display();
 
@@ -104,133 +107,55 @@ int main(void)
     uart_puts("Init end\r\n");
 
 
-    oled_clrscr();
-    oled_gotoxy(6, 0);
-    oled_puts("Voltage:");
-    oled_gotoxy(8, 1);
-    oled_putc(',');
-    oled_gotoxy(12, 1);
-    oled_putc('V');
+    
 
-    oled_gotoxy(3, 2);
-    oled_puts("Capacitance:");
-    oled_gotoxy(8, 3);
-    oled_putc(',');
-    oled_gotoxy(12, 3);
-    oled_puts("mAh");
-    oled_display();
+    // oled_gotoxy(3, 2);
+    // oled_puts("Capacitance:");
+    // oled_gotoxy(8, 3);
+    // oled_putc(',');
+    // oled_gotoxy(12, 3);
+    // oled_puts("mAh");
+    // oled_display();
 
 
 
     // Infinite loop
     while (1)
     {
-        float tenths;
-        float hundreds;
-        float thousands;
-        char Vstring[4]; // String for converted numbers by itoa()
-        char Tstring[4];
-        char Hstring[4];
-        char Thstring[4];
+        // float tenths;
+        // float hundreds;
+        // float thousands;
+        // char Vstring[4]; // String for converted numbers by itoa()
+        // char Tstring[4];
+        // char Hstring[4];
+        // char Thstring[4];
 
-        // itoa(ADCvalue, Vstring, 10);
-        // oled_gotoxy(7, 4);
+        // tenths = 10.0*(Uvalue - floor(Uvalue));
+        // hundreds = 10.0 * (tenths - floor(tenths));
+        // thousands = 10.0 * (hundreds - floor(hundreds));
+
+        // itoa(Uvalue, Vstring, 10);
+        // itoa(tenths, Tstring, 10);
+        // itoa(hundreds, Hstring, 10);
+        // itoa(thousands, Thstring, 10);
+
+        // oled_gotoxy(7,1);
         // oled_puts(Vstring);
+        // oled_gotoxy(9,1);
+        // oled_puts(Tstring);
+        // oled_gotoxy(10,1);
+        // oled_puts(Hstring);
+        // oled_gotoxy(11,1);
+        // oled_puts(Thstring);
+
         // uart_puts(Vstring);
+        // uart_putc(',');
+        // uart_puts(Tstring);
+        // uart_puts(Hstring);
+        // uart_puts(Thstring);
+        // uart_puts("V\r\n");
 
-        // int i;
-        // for (i = 0; i < 3; i++)
-        // {
-        //     switch (i)
-        //     {
-        //     case 0:
-        //         oled_gotoxy(9, 4);
-        //     case 1:
-        //         oled_gotoxy(10, 4);
-        //     case 2:
-        //         oled_gotoxy(11, 4);
-        //     }
-
-        //     ADCvalue = 10.0 * (ADCvalue - floor(ADCvalue));
-        //     itoa(ADCvalue, Vstring, 10);
-
-        //     oled_puts(Vstring);
-        //     uart_puts(Vstring);
-        // }
-
-        if(GPIO_read(&PINB,Start_button) == 0)
-        {   
-            uart_puts("Battery measurement started \r\n");
-            //tim0_ovf_count = 0;
-            //stoUS_counter = 0;
-            //float tau = 0.0;
-            //double Rval = 10000.0;
-            double Final_cap = 0.00;
-            char B_Cap[32];
-            // char bom[32];
-
-
-            
-            // GPIO_write_high(&PORTD,Measure_trig); // Reset cap voltage
-            GPIO_write_high(&PORTD,Gate_ON); // Start cap measurement
-            
-            while(Uvalue >= 2.5)
-            {
-                ISR(TIMER1_OVF_vect);
-                {
-                    mAs = Ivalue/3600;
-                    Final_cap = Final_cap + mAs;
-                    //tim0_ovf_count++;
-                }
-                // tau = tim0_ovf_count*16.0*pow(10,-6)*1.6;
-                // sprintf(bom, "counter: %.9f", tau);
-                // uart_puts(bom);
-                //uart_puts(" \r\n");
-                
-            }
-            // tau = tim0_ovf_count*16.0*1.6/1000000;
-            // tau = stoUS_counter/1000000;
-            //Cval = Rval * tau;
-            
-
-            // itoa(Cval, Cstr, 10);
-            // oled_gotoxy(7,3);
-            // oled_puts(Cstr);
-            
-            uart_puts("Dapacita odmerana\r\n");
-            sprintf(B_Cap, "Vysledok: %.2f", Final_cap);
-            uart_puts(B_Cap);
-            uart_puts("F\r\n");
-
-
-        }
-
-        tenths = 10.0*(Uvalue - floor(Uvalue));
-        hundreds = 10.0 * (tenths - floor(tenths));
-        thousands = 10.0 * (hundreds - floor(hundreds));
-
-        itoa(Uvalue, Vstring, 10);
-        itoa(tenths, Tstring, 10);
-        itoa(hundreds, Hstring, 10);
-        itoa(thousands, Thstring, 10);
-
-        oled_gotoxy(7,1);
-        oled_puts(Vstring);
-        oled_gotoxy(9,1);
-        oled_puts(Tstring);
-        oled_gotoxy(10,1);
-        oled_puts(Hstring);
-        oled_gotoxy(11,1);
-        oled_puts(Thstring);
-
-        uart_puts(Vstring);
-        uart_putc(',');
-        uart_puts(Tstring);
-        uart_puts(Hstring);
-        uart_puts(Thstring);
-        uart_puts("V\r\n");
-
-        oled_display();
+        // oled_display();
     }
     // Will never reach this
     return 0;
@@ -247,10 +172,15 @@ int main(void)
  * Function: ADC complete interrupt
  * Purpose:  Display converted value on LCD screen.
  **********************************************************************/
+ISR(TIMER1_OVF_vect)
+{
+
+}
+
 ISR(ADC_vect)
 {
     // Read converted value
     // Note that, register pair ADCH and ADCL can be read as a 16-bit value ADC
-    Uvalue = 5.0 * ADC / 1024.0; // Value converter for reading voltage in reference to AVCC = 5V
-    Ivalue = (5.0 * ADC / 1024.0)*0.05;
+    //Uvalue = 5.0 * ADC / 1024.0; // Value converter for reading voltage in reference to AVCC = 5V
+    // Ivalue = (5.0 * ADC / 1024.0)*0.05;
 }
