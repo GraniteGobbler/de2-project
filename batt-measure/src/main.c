@@ -88,7 +88,7 @@ int main(void)
     oled_gotoxy(0, 3);  oled_puts("Voltage:  _.___ V");
     oled_gotoxy(0, 4);  oled_puts("Current:  _.___ A");
     oled_gotoxy(0, 5);  oled_puts("Capacity: _.___ mAh");
-    oled_gotoxy(0, 7);  oled_puts("Press RED to start!"); 
+    oled_gotoxy(0, 7);  oled_puts("Press GREEN to start!"); 
 
     oled_display();
 
@@ -123,7 +123,7 @@ int main(void)
         if (GPIO_read(&PIND, Start_button) == 0)
         {
             uart_puts("Start button pressed!\r\n");
-            oled_gotoxy(0, 7);  oled_puts("                   "); // Clear 7th row
+            oled_gotoxy(0, 7);  oled_puts("                     "); // Clear 7th row
 
             Voltage_unloaded = ADC_A0;  // Snapshot of unloaded voltage of battery
             
@@ -138,7 +138,7 @@ int main(void)
         if ((GPIO_read(&PIND, Stop_button) == 0) & (isStarted == 1))
         {
             uart_puts("Stop button pressed!\r\n");
-            oled_gotoxy(0, 7);  oled_puts("Press RED to start!");
+            oled_gotoxy(0, 7);  oled_puts("Press GREEN to start!");
             oled_gotoxy(9,3);  oled_puts(" _.___ V");
             oled_gotoxy(9,4);  oled_puts(" _.___ A");
             
