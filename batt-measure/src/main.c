@@ -42,6 +42,7 @@
 
 // Global vars
 float ADC_A0; // Analog pin A0 voltage
+uint16_t TIM1_OVF_CNT; // Timer1 overflow counter
 
 int main(void)
 {
@@ -107,11 +108,12 @@ int main(void)
     // Vars in while loop
     uint8_t isStarted = 0;
     
+    float ADC_A0_old = 0.0;
     float Voltage = 0.0;
     float Voltage_unloaded = 0.0;
     float Current = 0.0;
     float R_circ = 1.11265; // Total circuit resistance
-    float R_bat = 0.0; // Internal resistance of battery - !needs to be calculated after some time!
+    float R_bat = 0.0; // Internal resistance of battery - !needs to be calculated after 4 sec!
 
     char cVolt[8];
     char cCurr[8];
@@ -120,14 +122,14 @@ int main(void)
     // Infinite loop
     while (1)
     {
-        if (GPIO_read(&PIND, Start_button) == 0)
+        if ((GPIO_read(&PIND, Start_button) == 0) & (isStarted == 0))
         {
             uart_puts("Start button pressed!\r\n");
             oled_gotoxy(0, 7);  oled_puts("                     "); // Clear 7th row
 
             Voltage_unloaded = ADC_A0;  // Snapshot of unloaded voltage of battery
             
-            sprintf(cVolt, "%.3f", fabs(Voltage_unloaded));                           
+            sprintf(cVolt, "%.3f", Voltage_unloaded);                           
             uart_puts("Unloaded Voltage: ");
             uart_puts(cVolt);
             uart_puts("\r\n");
@@ -147,63 +149,67 @@ int main(void)
 
         if (isStarted == 1)
         {
+            TIM1_OVF_CNT = 0;
             Voltage = ADC_A0;
             Current = Voltage/(R_circ + R_bat);
 
-            if (floor(Voltage) == 0.0)
+            if (floor(Voltage) == 0.0)  // Is 0 V?
             {
-                oled_gotoxy(9,3);   oled_putc(' ');
+                oled_gotoxy(9,3);   oled_putc(' '); // Don't print '-' sign
                 oled_gotoxy(9,4);   oled_putc(' ');
             }
-            else if ((Voltage * -1) == fabs(Voltage))
+            else if ((Voltage * -1) == fabs(Voltage))   // Is negative? 
             {
-                oled_gotoxy(9,3);   oled_putc('-');
+                oled_gotoxy(9,3);   oled_putc('-'); // Print '-' sign on a specific place
                 oled_gotoxy(9,4);   oled_putc('-');
             }
-            else
+            else    // Is positive?
             {
-                oled_gotoxy(9,3);   oled_putc(' ');
+                oled_gotoxy(9,3);   oled_putc(' '); // Clear '-' sign
                 oled_gotoxy(9,4);   oled_putc(' ');
             }
             
-            sprintf(cVolt, "%.3f", fabs(Voltage));
-            sprintf(cCurr, "%.3f", fabs(Current));                 
-            oled_gotoxy(10,3);   oled_puts(cVolt);
-            oled_gotoxy(10,4);   oled_puts(cCurr);
-           
-            uart_puts("Voltage: ");
-            uart_puts(cVolt);
-            uart_puts("\r\n");
+            if (ADC_A0 != ADC_A0_old)   // Only print values if there is a change
+            {
+                sprintf(cVolt, "%.3f", fabs(Voltage));
+                sprintf(cCurr, "%.3f", fabs(Current));                 
+                oled_gotoxy(10,3);   oled_puts(cVolt);
+                oled_gotoxy(10,4);   oled_puts(cCurr);
+            
+                uart_puts("Voltage: ");
+                uart_puts(cVolt);
+                uart_puts("\r\n");
 
-            uart_puts("Current: ");
-            uart_puts(cCurr);
-            uart_puts("\r\n");
+                uart_puts("Current: ");
+                uart_puts(cCurr);
+                uart_puts("\r\n");
+            }
         }
 
+        ADC_A0_old = ADC_A0;
 
-        oled_display();
-
-        
+        oled_display();        
     }
-    // Will never reach this
+
     return 0;
 }
 
 /* Interrupt service routines ----------------------------------------*/
 /**********************************************************************
  * Function: Timer/Counter1 overflow interrupt
- * Purpose:  Use Single Conversion mode and start conversion every 100 ms.
+ * Purpose:  Use Single Conversion mode and start conversion every 1 s.
  **********************************************************************/
 ISR(TIMER1_OVF_vect)
 {
     ADCSRA |= (1 << ADSC); // Start Conversion
+    TIM1_OVF_CNT++;
 }
 
 /**********************************************************************
  * Function: ADC complete interrupt
- * Purpose:  Display converted value on LCD screen.
+ * Purpose:  Convert ADC value to 5V AVCC reference
  **********************************************************************/
 ISR(ADC_vect)
 {
-    ADC_A0 = 5.0 * ADC / 1023.0; // Value converter for reading voltage in reference to AVCC = 5V   
+    ADC_A0 = 5.0 * ADC / 1023.0;   // ADC channel A0
 }
