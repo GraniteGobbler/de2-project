@@ -68,10 +68,20 @@ int main(void)
     // GPIO_mode_input_pullup(&DDRD, Start_button);
     // GPIO_mode_input_pullup(&DDRD, Stop_button);
 
+    
+
 
     ////  INIT  ////
     uart_init(UART_BAUD_SELECT(115200, F_CPU));
     uart_puts("Init start\r\n");
+
+    // Configure 16-bit Timer/Counter1 to start ADC conversion
+    // Set prescaler to 262 ms and enable overflow interrupt
+    TIM1_OVF_1SEC
+    TIM1_OVF_ENABLE
+
+    // Enables interrupts by setting the global interrupt mask
+    sei();
 
     oled_init(OLED_DISP_ON); // Initialize OLED
     oled_clrscr();
@@ -85,30 +95,19 @@ int main(void)
     oled_charMode(NORMALSIZE);
     oled_gotoxy(0, 5);  oled_puts("Press GREEN to start!");
     oled_gotoxy(1, 6);  oled_puts("Press RED to stop!");
-    
-    // oled_gotoxy(0, 3);  oled_puts("Voltage:  _.___ V");
-    // oled_gotoxy(0, 4);  oled_puts("Current:  _.___ A");
-    // oled_gotoxy(0, 5);  oled_puts("Capacity: _.___ mAh");
 
-    // oled_display();
-
-    // Configure 16-bit Timer/Counter1 to start ADC conversion
-    // Set prescaler to 262 ms and enable overflow interrupt
-    TIM1_OVF_1SEC
-    TIM1_OVF_ENABLE
-
-    // Enables interrupts by setting the global interrupt mask
-    sei();
+    GPIO_write_high(&PORTB, Base_ON);
 
     uart_puts("Init end\r\n");
     ////  END INIT  ////
 
 
-    // Vars in while loop
+    //// Vars in while loop //// 
     uint8_t isStarted = 0;
+    // uint8_t isFinished = 0;
     uint16_t Current_Time = 0;
     
-    float ADC_A0_old = 0.0;
+    // float ADC_A0_old = 0.0;
     float Voltage = 0.0;
     float Voltage_unloaded = 0.0;
     float Voltage_dropped = 0.0;
@@ -137,7 +136,6 @@ int main(void)
         {
             uart_puts("Measurement started!\r\n");
             
-            // oled_gotoxy(0, 7);  oled_puts("                     "); // Clear 7th row
             oled_clrscr();
             oled_gotoxy(0, 0);  oled_puts("IR:       _.___  mOhm");
             oled_gotoxy(0, 2);  oled_puts("Voltage:  _.___   V");
@@ -152,13 +150,16 @@ int main(void)
             uart_puts(cVolt);
             uart_puts("\r\n");
 
-            TIM1_OVF_CNT = 0;   // Reset timer overflow counter
 
+            GPIO_write_low(&PORTB, Base_ON);
+            TIM1_OVF_CNT = 0;   // Reset timer overflow counter
             isStarted = 1;  // Set measurement start flag to 1 
         }
 
         if ((GPIO_read(&PIND, Stop_button) == 0) & (isStarted == 1))    // Red Button
         {
+            GPIO_write_high(&PORTB, Base_ON);
+
             uart_puts("Measurement stopped!\r\n");
             
             oled_clrscr();
@@ -188,12 +189,13 @@ int main(void)
             Current = Voltage/fabs(R_circ + R_bat);
 
             // Start measuring time
-            if (TIM1_OVF_CNT == 4)  // If time == 4sec, measure dropped voltage
+            if ((TIM1_OVF_CNT == 4) & (Capacity == 0.0))  // If time == 4sec, measure dropped voltage
             {
                 Voltage_dropped = Voltage;
                 R_bat = (Voltage_unloaded - Voltage_dropped)/Current;   // Calculate internal resistance (Voltage_unloaded - Voltage_dropped)/Current
             }
             
+            // Capacity and Energy calculation
             if(Current_Time != TIM1_OVF_CNT)
             {
                 Capacity_increment = (1000 * Current); // [mAs]
@@ -204,35 +206,51 @@ int main(void)
 
                 Current_Time = TIM1_OVF_CNT;
                    
-                if ((Voltage >= 0.1) & (Voltage <= 2.5))
+                // if ((Voltage >= 0.1) & (Voltage <= 2.5))
+                if (Voltage <= 2.5)
                 {
                     isStarted = 0;
                     // dodelat print na measuremenet finished
+                    uart_puts("Measurement finished!\r\n");
+
+                    oled_clrscr();
+                    oled_charMode(DOUBLESIZE);
+                    oled_puts("BATT Meter");
+                    oled_drawLine(0, 15, 128, 15, WHITE); // oled_drawLine(x1, y1, x2, y2, color)
+
+                    oled_charMode(NORMALSIZE);
+                    oled_gotoxy(0, 5);  oled_puts("Press GREEN to start!");
+                    oled_gotoxy(1, 6);  oled_puts("Press RED to stop!");
+
+                    oled_display();
+                
+                    Capacity = 0.0;
+                    Energy = 0.0; 
+                    continue;
                 }
-            }
-            
 
-            // Displaying logic //
-            
+                // Displaying logic //
+                if (floor(Voltage) == 0.0)  // Is 0 V?
+                {
+                    oled_gotoxy(9,2);   oled_putc(' '); // Don't print '-' sign
+                    oled_gotoxy(9,3);   oled_putc(' ');
+                }
+                else if ((Voltage * -1) == fabs(Voltage))   // Is negative? 
+                {
+                    oled_gotoxy(9,2);   oled_putc('-'); // Print '-' sign on a specific place
+                    oled_gotoxy(9,3);   oled_putc('-');
+                }
+                else    // Is positive?
+                {
+                    oled_gotoxy(9,2);   oled_putc(' '); // Clear '-' sign
+                    oled_gotoxy(9,3);   oled_putc(' ');
+                }
+                
+                // if (ADC_A0 != ADC_A0_old)   // Only print values if there is a change
+                // {
+                    
+                // }
 
-            if (floor(Voltage) == 0.0)  // Is 0 V?
-            {
-                oled_gotoxy(9,2);   oled_putc(' '); // Don't print '-' sign
-                oled_gotoxy(9,3);   oled_putc(' ');
-            }
-            else if ((Voltage * -1) == fabs(Voltage))   // Is negative? 
-            {
-                oled_gotoxy(9,2);   oled_putc('-'); // Print '-' sign on a specific place
-                oled_gotoxy(9,3);   oled_putc('-');
-            }
-            else    // Is positive?
-            {
-                oled_gotoxy(9,2);   oled_putc(' '); // Clear '-' sign
-                oled_gotoxy(9,3);   oled_putc(' ');
-            }
-            
-            if (ADC_A0 != ADC_A0_old)   // Only print values if there is a change
-            {
                 sprintf(cIR, "%.3f", R_bat*1000); // internal rezistance print is in mOhm
                 sprintf(cVolt, "%.3f", fabs(Voltage));
                 sprintf(cCurr, "%.3f", fabs(Current));
@@ -245,30 +263,26 @@ int main(void)
                 oled_gotoxy(10,4);   oled_puts(cCap);
                 oled_gotoxy(10,5);   oled_puts(cEne);
 
-
                 uart_puts("IR: ");
                 uart_puts(cIR);
                 uart_puts("\r\n");
-
                 uart_puts("Voltage: ");
                 uart_puts(cVolt);
                 uart_puts("\r\n");
-
                 uart_puts("Current: ");
                 uart_puts(cCurr);
                 uart_puts("\r\n");
-
                 uart_puts("Capacity: ");
                 uart_puts(cCap);
                 uart_puts("\r\n");
-
                 uart_puts("Energy: ");
                 uart_puts(cEne);
                 uart_puts("\r\n");
+                
             }
         }
 
-        ADC_A0_old = ADC_A0;
+        // ADC_A0_old = ADC_A0;
         
         oled_display();        
     }
