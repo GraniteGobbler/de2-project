@@ -140,8 +140,8 @@ int main(void)
             oled_gotoxy(0, 0);  oled_puts("IR:       _.___  mOhm");
             oled_gotoxy(0, 2);  oled_puts("Voltage:  _.___   V");
             oled_gotoxy(0, 3);  oled_puts("Current:  _.___   A");
-            oled_gotoxy(0, 4);  oled_puts("Capacity: _.___   mAh");
-            oled_gotoxy(0, 5);  oled_puts("Energy:   _.___   mWh");
+            oled_gotoxy(0, 4);  oled_puts("Capacity: _._     mAh");
+            oled_gotoxy(0, 5);  oled_puts("Energy:   _._     mWh");
             
             Voltage_unloaded = ADC_A0;  // Snapshot of unloaded voltage of battery
             sprintf(cVolt, "%.3f", Voltage_unloaded);     
@@ -225,8 +225,8 @@ int main(void)
 
                         oled_charMode(NORMALSIZE);
                         oled_gotoxy(0, 3);  oled_puts("IR:       _.___  mOhm");
-                        oled_gotoxy(0, 4);  oled_puts("Capacity: _.___   mAh");
-                        oled_gotoxy(0, 5);  oled_puts("Energy:   _.___   mWh");
+                        oled_gotoxy(0, 4);  oled_puts("Capacity: _._     mAh");
+                        oled_gotoxy(0, 5);  oled_puts("Energy:   _._     mWh");
                         oled_gotoxy(0, 7);  oled_puts("Press RED to return!");             
                 
                         oled_gotoxy(10, 3);   oled_puts(cIR);
@@ -273,8 +273,8 @@ int main(void)
                 sprintf(cIR, "%.3f", R_bat*1000); // internal rezistance print is in mOhm
                 sprintf(cVolt, "%.3f", fabs(Voltage));
                 sprintf(cCurr, "%.3f", fabs(Current));
-                sprintf(cCap, "%.3f", Capacity);
-                sprintf(cEne, "%.3f", Energy);                 
+                sprintf(cCap, "%.1f", Capacity);
+                sprintf(cEne, "%.1f", Energy);                 
                 
                 oled_gotoxy(10,0);   oled_puts(cIR);
                 oled_gotoxy(10,2);   oled_puts(cVolt);
@@ -315,7 +315,7 @@ int main(void)
 ISR(TIMER1_OVF_vect)
 {
     ADCSRA |= (1 << ADSC); // Start Conversion
-    TIM1_OVF_CNT++;
+    TIM1_OVF_CNT++; // TIM1_OVF_1SEC
 }
 
 /**********************************************************************
