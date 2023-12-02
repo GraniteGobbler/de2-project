@@ -94,7 +94,7 @@ int main(void)
 
     oled_charMode(NORMALSIZE);
     oled_gotoxy(0, 5);  oled_puts("Press GREEN to start!");
-    oled_gotoxy(1, 6);  oled_puts("Press RED to stop!");
+    oled_gotoxy(1, 6);  oled_puts("Press RED to pause!");
 
     GPIO_write_high(&PORTB, Base_ON);
 
@@ -169,7 +169,7 @@ int main(void)
 
             oled_charMode(NORMALSIZE);
             oled_gotoxy(0, 5);  oled_puts("Press GREEN to start!");
-            oled_gotoxy(1, 6);  oled_puts("Press RED to stop!");
+            oled_gotoxy(1, 6);  oled_puts("Press RED to pause!");
             
             isStarted = 0;
         }
@@ -210,17 +210,41 @@ int main(void)
                 if (Voltage <= 2.5)
                 {
                     isStarted = 0;
-                    // dodelat print na measuremenet finished
                     uart_puts("Measurement finished!\r\n");
 
                     oled_clrscr();
+                    
+                    GPIO_write_high(&PORTB, Base_ON);
+
+                    while ((GPIO_read(&PIND, Stop_button) == 1) & (Capacity != 0.0))
+                    {   
+                        oled_charMode(DOUBLESIZE);
+                        oled_gotoxy(1, 0);
+                        oled_puts("Finished!");
+                        oled_drawLine(0, 15, 128, 15, WHITE);
+
+                        oled_charMode(NORMALSIZE);
+                        oled_gotoxy(0, 3);  oled_puts("IR:       _.___  mOhm");
+                        oled_gotoxy(0, 4);  oled_puts("Capacity: _.___   mAh");
+                        oled_gotoxy(0, 5);  oled_puts("Energy:   _.___   mWh");
+                        oled_gotoxy(0, 7);  oled_puts("Press RED to return!");             
+                
+                        oled_gotoxy(10, 3);   oled_puts(cIR);
+                        oled_gotoxy(10, 4);   oled_puts(cCap);
+                        oled_gotoxy(10, 5);   oled_puts(cEne);
+                        
+                        oled_display();
+                    }    
+                    
+                    oled_clrscr();
+
                     oled_charMode(DOUBLESIZE);
                     oled_puts("BATT Meter");
-                    oled_drawLine(0, 15, 128, 15, WHITE); // oled_drawLine(x1, y1, x2, y2, color)
+                    oled_drawLine(0, 15, 128, 15, WHITE);
 
                     oled_charMode(NORMALSIZE);
                     oled_gotoxy(0, 5);  oled_puts("Press GREEN to start!");
-                    oled_gotoxy(1, 6);  oled_puts("Press RED to stop!");
+                    oled_gotoxy(1, 6);  oled_puts("Press RED to pause!");
 
                     oled_display();
                 
@@ -245,11 +269,6 @@ int main(void)
                     oled_gotoxy(9,2);   oled_putc(' '); // Clear '-' sign
                     oled_gotoxy(9,3);   oled_putc(' ');
                 }
-                
-                // if (ADC_A0 != ADC_A0_old)   // Only print values if there is a change
-                // {
-                    
-                // }
 
                 sprintf(cIR, "%.3f", R_bat*1000); // internal rezistance print is in mOhm
                 sprintf(cVolt, "%.3f", fabs(Voltage));
@@ -282,8 +301,6 @@ int main(void)
             }
         }
 
-        // ADC_A0_old = ADC_A0;
-        
         oled_display();        
     }
 
