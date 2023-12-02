@@ -107,11 +107,21 @@ int main(void)
 
     // Vars in while loop
     uint8_t isStarted = 0;
+    uint16_t Current_Time = 0;
     
     float ADC_A0_old = 0.0;
     float Voltage = 0.0;
     float Voltage_unloaded = 0.0;
+    float Voltage_dropped = 0.0;
+
     float Current = 0.0;
+
+    float Capacity = 0.0; //  [mAh]
+    float Capacity_increment = 0.0; //  [mAs]
+
+    float Energy = 0.0; // [mWh]
+    float Energy_increment = 0.0; //  [mWs]
+    
     float R_circ = 1.11265; // Total circuit resistance
     float R_bat = 0.0; // Internal resistance of battery - !needs to be calculated after 4 sec!
 
@@ -122,7 +132,7 @@ int main(void)
     // Infinite loop
     while (1)
     {
-        if ((GPIO_read(&PIND, Start_button) == 0) & (isStarted == 0))
+        if ((GPIO_read(&PIND, Start_button) == 0) & (isStarted == 0))   // Green Button
         {
             uart_puts("Start button pressed!\r\n");
             oled_gotoxy(0, 7);  oled_puts("                     "); // Clear 7th row
@@ -138,7 +148,7 @@ int main(void)
             TIM1_OVF_CNT = 0;   // Reset timer overflow counter
         }
 
-        if ((GPIO_read(&PIND, Stop_button) == 0) & (isStarted == 1))
+        if ((GPIO_read(&PIND, Stop_button) == 0) & (isStarted == 1))    // Red Button
         {
             uart_puts("Stop button pressed!\r\n");
             oled_gotoxy(0, 7);  oled_puts("Press GREEN to start!");
@@ -147,16 +157,36 @@ int main(void)
             
             isStarted = 0;
         }
-
+  
         if (isStarted == 1)
-        {
+        {   
+            // Measurement logic //
             Voltage = ADC_A0;
             Current = Voltage/(R_circ + R_bat);
 
             // Start measuring time
             // If time == 4sec, measure dropped voltage
             // Calculate internal resistance (Voltage_unloaded - Voltage_dropped)/Current
+            if (TIM1_OVF_CNT == 4)
+            {
+                Voltage_dropped = Voltage;
+                R_bat = (Voltage_unloaded - Voltage_dropped)/Current;
+            }
+            
+            if(Current_Time != TIM1_OVF_CNT)
+            {
+            
+                Capacity_increment = (1000 * Current); // [mAs]
+                Capacity = Capacity + (Capacity_increment / 3600);  // [mAh]  
+                
+                Energy_increment = Capacity_increment * Voltage; // [mWs]          
+                Energy = Energy + (Energy_increment / 3600); // [mWh]  
 
+                Current_Time = TIM1_OVF_CNT;
+            }
+            
+
+            // Displaying logic //
             if (floor(Voltage) == 0.0)  // Is 0 V?
             {
                 oled_gotoxy(9,3);   oled_putc(' '); // Don't print '-' sign

@@ -6,3 +6,7 @@ DE2 Measuring electricity project
 <p align="center">
   <img src="img/board.svg" alt="Arduino UNO board connections"/>
 </p>
+
+<p align="center">
+  <img src="img/BATT Meas Circuit.svg" alt="Arduino UNO board connections"/>
+</p>
