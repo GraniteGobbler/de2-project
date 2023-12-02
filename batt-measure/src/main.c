@@ -14,8 +14,8 @@
 /* Includes ----------------------------------------------------------*/
 #include <avr/io.h>        // AVR device-specific IO definitions
 #include <avr/interrupt.h> // Interrupts standard C library for AVR-GCC
-#include <stdlib.h>        // C library. Needed for number conversions
-#include <stdio.h>  
+// #include <stdlib.h>        // C library. Needed for number conversions
+#include <stdio.h>         // C library for IO operations
 #include <math.h>          // C library for math operations
 
 #include "timer.h" // Timer library for AVR-GCC
@@ -31,9 +31,9 @@
  * Returns:  none
  **********************************************************************/
 
-#define Start_button PD2   // PD2 is start button for C measurement
-#define Stop_button PD3   // PD3 is stop button for C measurement
-#define Base_ON PD7  // PD7 is measurement trigger pin for C measurement
+#define Start_button PD2   // PD2 is start button for battery measurement
+#define Stop_button PD3   // PD3 is stop button for battery measurement
+#define Base_ON PB0  // PB0 is measurement trigger pin for external battery load circuit
 
 #ifndef F_CPU
 #define F_CPU 16000000 // CPU frequency in Hz required for UART_BAUD_SELECT
@@ -135,6 +135,7 @@ int main(void)
             uart_puts("\r\n");
 
             isStarted = 1;
+            TIM1_OVF_CNT = 0;   // Reset timer overflow counter
         }
 
         if ((GPIO_read(&PIND, Stop_button) == 0) & (isStarted == 1))
@@ -149,9 +150,12 @@ int main(void)
 
         if (isStarted == 1)
         {
-            TIM1_OVF_CNT = 0;
             Voltage = ADC_A0;
             Current = Voltage/(R_circ + R_bat);
+
+            // Start measuring time
+            // If time == 4sec, measure dropped voltage
+            // Calculate internal resistance (Voltage_unloaded - Voltage_dropped)/Current
 
             if (floor(Voltage) == 0.0)  // Is 0 V?
             {
