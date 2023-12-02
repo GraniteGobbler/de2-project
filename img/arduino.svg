@@ -58,7 +58,7 @@
        style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:0.625057;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 81.583385,109.72583 c -2.625497,0 -4.739072,2.11479 -4.739072,4.74028 v 87.88981 c 0,2.6255 2.113575,4.73906 4.739072,4.73906 H 201.35587 c 2.62551,0 4.73908,-2.11356 4.73908,-4.73906 v -87.88981 c 0,-2.62549 -2.11357,-4.74028 -4.73908,-4.74028 z m 124.654165,20.19712 0.0535,68.2436 c 0,0 8.02881,-6.89597 8.02881,-11.43175 v -44.81548 c 0,-3.80269 -7.8305,-11.8061 -8.08245,-11.99637 z"
        sodipodi:nodetypes="sssssssssccsscc"
-       inkscape:export-filename="img\arduino.svg"
+       inkscape:export-filename="board.svg"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" /><path
        id="rect9-5-9-3"
