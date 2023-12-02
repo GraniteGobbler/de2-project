@@ -284,19 +284,19 @@ int main(void)
 
                 uart_puts("IR: ");
                 uart_puts(cIR);
-                uart_puts("\r\n");
+                uart_puts(" mOhm\r\n");
                 uart_puts("Voltage: ");
                 uart_puts(cVolt);
-                uart_puts("\r\n");
+                uart_puts(" V\r\n");
                 uart_puts("Current: ");
                 uart_puts(cCurr);
-                uart_puts("\r\n");
+                uart_puts(" A\r\n");
                 uart_puts("Capacity: ");
                 uart_puts(cCap);
-                uart_puts("\r\n");
+                uart_puts(" mAh\r\n");
                 uart_puts("Energy: ");
                 uart_puts(cEne);
-                uart_puts("\r\n");
+                uart_puts(" mWh\r\n");
                 
             }
         }
