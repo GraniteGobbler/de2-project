@@ -85,8 +85,8 @@ int main(void)
 
     oled_init(OLED_DISP_ON); // Initialize OLED
     oled_clrscr();
-    oled_set_contrast(25); // Contrast setting
-    oled_invert(0);
+    oled_set_contrast(255); // Contrast setting
+    oled_invert(1);
 
     oled_charMode(DOUBLESIZE);
     oled_puts("BATT Meter");
