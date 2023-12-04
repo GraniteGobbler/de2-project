@@ -57,19 +57,6 @@ int main(void)
     ADCSRA |= (1 << ADIE);
     // Set clock prescaler to 128
     ADCSRA = ADCSRA | (1<<ADPS2 | 1<<ADPS1 | 1<<ADPS0);
-    // Prescaler set to 16. ADPS[2:0] = 100
-    // ADCSRA &= ~(1 << ADPS1 | 1 << ADPS0); ADCSRA |= (1 << ADPS2); 
-    // Enable ADC Auto Trigger Enable
-    // ADCSRA |= (1 << ADATE);
-    // Set Free Running Mode as ADC Auto Trigger Source ADTS[2:0] = 000
-    // ADCSRB &= ~(1 << ADTS2 | 1 << ADTS1 | 1 << ADTS0);
-    
-    // Set GPIO input pins
-    // GPIO_mode_input_pullup(&DDRD, Start_button);
-    // GPIO_mode_input_pullup(&DDRD, Stop_button);
-
-    
-
 
     ////  INIT  ////
     uart_init(UART_BAUD_SELECT(115200, F_CPU));
@@ -85,17 +72,18 @@ int main(void)
 
     oled_init(OLED_DISP_ON); // Initialize OLED
     oled_clrscr();
-    oled_set_contrast(25); // Contrast setting
-    oled_invert(0);
+    oled_set_contrast(255); // Contrast setting
+    oled_invert(1);
 
     oled_charMode(DOUBLESIZE);
     oled_puts("BATT Meter");
-    oled_drawLine(0, 15, 128, 15, WHITE); // oled_drawLine(x1, y1, x2, y2, color)
+    oled_drawLine(0, 15, 128, 15, WHITE);
 
     oled_charMode(NORMALSIZE);
     oled_gotoxy(0, 5);  oled_puts("Press GREEN to start!");
     oled_gotoxy(1, 6);  oled_puts("Press RED to pause!");
 
+    GPIO_mode_output(&DDRB, Base_ON);
     GPIO_write_high(&PORTB, Base_ON);
 
     uart_puts("Init end\r\n");
@@ -185,12 +173,12 @@ int main(void)
         if (isStarted == 1)
         {   
             // Measurement logic //
-            Voltage = ADC_A0;
+            Voltage = ADC_A0-0.05;
             Current = Voltage/fabs(R_circ + R_bat);
-
+            
             // Start measuring time
-            if ((TIM1_OVF_CNT == 4) & (Capacity == 0.0))  // If time == 4sec, measure dropped voltage
-            {
+            if ((TIM1_OVF_CNT == 3) & (R_bat == 0))   // If time == 4sec, measure dropped voltage
+            { 
                 Voltage_dropped = Voltage;
                 R_bat = (Voltage_unloaded - Voltage_dropped)/Current;   // Calculate internal resistance (Voltage_unloaded - Voltage_dropped)/Current
             }
@@ -324,5 +312,5 @@ ISR(TIMER1_OVF_vect)
  **********************************************************************/
 ISR(ADC_vect)
 {
-    ADC_A0 = 5.0 * ADC / 1023.0;   // ADC channel A0
+    ADC_A0 = (5.0 * ADC / 1023.0);   // ADC channel A0
 }
