@@ -236,6 +236,7 @@ int main(void)
 
                     oled_display();
                 
+                    R_bat = 0.0;
                     Capacity = 0.0;
                     Energy = 0.0; 
                     continue;
