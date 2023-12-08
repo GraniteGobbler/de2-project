@@ -1,8 +1,9 @@
+# DE2 Measuring electricity project
+
 <p align="center">
-  <img src="img/b71865e3053b41e9.JPG" alt="Arduino UNO board connections"/>
+  <img src="img/b71865e3053b41e9.JPG" width="600" alt="Arduino UNO board connections"/>
 </p>
 
-# DE2 Measuring electricity project
 
 ### Team members
 
