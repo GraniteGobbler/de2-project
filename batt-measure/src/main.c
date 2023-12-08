@@ -56,7 +56,7 @@ int main(void)
     // Enable conversion complete interrupt
     ADCSRA |= (1 << ADIE);
     // Set clock prescaler to 128
-    ADCSRA = ADCSRA | (1 << ADPS2 | 1 << ADPS1 | 1 << ADPS0);
+    ADCSRA |= (1 << ADPS2 | 1 << ADPS1 | 1 << ADPS0);
 
     ////  INIT  ////
     uart_init(UART_BAUD_SELECT(115200, F_CPU));
@@ -354,5 +354,6 @@ ISR(TIMER1_OVF_vect)
  **********************************************************************/
 ISR(ADC_vect)
 {
-    ADC_A0 = (5.0 * ADC / 1023.0); // ADC channel A0
+    static uint8_t Vref = 5;
+    ADC_A0 = Vref * ADC / 1023.0; // ADC channel A0
 }

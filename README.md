@@ -26,7 +26,7 @@ We used 2 buttons connected to digital pins `PD2` (Start button) and `PD3` (Paus
 
 **Schematic of battery discharging circuit**
 <p align="center">
-  <img src="img/BATT Meas Circuit.svg" alt="Arduino UNO board connections"/>
+  <img src="img/BATT Meas Circuit.svg" alt="Schematic of battery discharging circuit"/>
 </p>
 
 The discharging circuit consists of a IRF8010 MOSFET as a switch that is controlled by a BC557 BJT. The base of the BJT is connected via 10 kΩ resistor to the `PB0` digital pin. The circuit resistance has to be measured separately, as we are using only a single analog pin for voltage measurement. 
@@ -36,12 +36,15 @@ The battery capacity measurement is slightly skewed, because of how we measure i
 ## Software description
 
 <p align="center">
-  <img src="img/diagram.svg" width="500" alt="Arduino UNO board connections"/>
+  <img src="img/diagram.svg" width="700" alt="Program flow chart"/>
 </p>
 
 The internal ADC of the Atmega328 is used for voltage measurement. In the initialization phase, registers are set accordingly: 
 
-[Tabulka s hodnotami registrov]: #
+| Register    | Address     | Function |
+|    :----:   |    :----    |  :----   |
+| ADMUX       | `REFS0 = 1` <br> `MUX[3:0] = 0` | Set ADC voltage reference to internal AVcc <br> Select ADC input channel to ADC0, pin `A0`
+| ADSRA       | `ADEN = 1` <br> `ADIE = 1` <br> `ADPS[2:0] = 1` | Enable ADC module <br> Enable conversion complete interrupt <br> Set clock prescaler to 128
 
 ``` c
  // Select ADC voltage reference to "AVcc with external capacitor at AREF pin"
@@ -53,8 +56,21 @@ ADCSRA |= (1 << ADEN);
 // Enable conversion complete interrupt
 ADCSRA |= (1 << ADIE);
 // Set clock prescaler to 128
-ADCSRA = ADCSRA | (1 << ADPS2 | 1 << ADPS1 | 1 << ADPS0);
+ADCSRA |= (1 << ADPS2 | 1 << ADPS1 | 1 << ADPS0);
 ```
+
+Using the Timer1 and its overflow Interrupt Service Routine, the `TIM1_OVF_CNT` global variable is incremented by 1 every 1,049 seconds. This makes for a 1 second clock signal that can be used later. <br>
+ADC converted data is stored inside `ADC_A0` global variable and normalized by its maximum value: 1023, it is then multiplied by the reference voltage, which can be set manually by editing the variable `Vref`. Default value is 5.
+
+``` c
+ISR(ADC_vect)
+{
+    static uint8_t Vref = 5;
+    ADC_A0 = Vref * ADC / 1023.0; // ADC channel ADC0
+}
+```
+
+
 `R_bat = (Voltage_unloaded - Voltage_dropped) / Current`
 
 
@@ -67,18 +83,18 @@ ADCSRA = ADCSRA | (1 << ADPS2 | 1 << ADPS1 | 1 << ADPS0);
 
 Then you can check volatage of battery and if its suitable for measurement.
 
-- 4,2 - 4,1V battery is fully charged
+- 4,2 ~ 4,1V battery is fully charged
 - 3,7 battery is charged halfway
 - <2,5V battery is discharged
 
 &nbsp;
 
-2. If it's suitable you can press the <font color="green">green button</font> to start the measurement. 
+2. If it's suitable you can press the green button to start the measurement. 
 <p align="center">
   <img src="img/150f92d110eb5226-photo.JPG" width="500" alt="Green button detail img"/>
 </p>
 
-3. After few second an internal resistence is shown on display. Other values are shown throughout the measurement.
+3. After few seconds the internal resistence is shown on the display. Other values are shown throughout the whole measurement.
 <p align="center">
   <img src="img/17620b9d4dcf60ed-photo.JPG" width="500" alt="OLED detail img"/>
 </p>
