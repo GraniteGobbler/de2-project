@@ -41,8 +41,8 @@
 #endif
 
 // Global vars
-float ADC_A0;          // Analog pin A0 voltage
-uint16_t TIM1_OVF_CNT; // Timer1 overflow counter
+volatile float ADC_A0;          // Analog pin A0 voltage
+volatile uint16_t TIM1_OVF_CNT; // Timer1 overflow counter
 
 int main(void)
 {
@@ -354,6 +354,6 @@ ISR(TIMER1_OVF_vect)
  **********************************************************************/
 ISR(ADC_vect)
 {
-    static uint8_t Vref = 5;
+    static uint8_t Vref = 5;      // Voltage reference for normalization in ADC ISR
     ADC_A0 = Vref * ADC / 1023.0; // ADC channel A0
 }

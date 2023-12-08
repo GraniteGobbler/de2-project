@@ -65,7 +65,7 @@ ADC converted data is stored inside `ADC_A0` global variable and normalized by i
 ``` c
 ISR(ADC_vect)
 {
-    static uint8_t Vref = 5;
+    static uint8_t Vref = 5;      // Voltage reference for normalization in ADC ISR
     ADC_A0 = Vref * ADC / 1023.0; // ADC channel ADC0
 }
 ```
