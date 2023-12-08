@@ -1,7 +1,7 @@
 # DE2 Measuring electricity project
 
 <p align="center">
-  <img src="img/b71865e3053b41e9.JPG" width="600" alt="Arduino UNO board connections"/>
+  <img src="img/b71865e3053b41e9.JPG" width="500" alt="Arduino UNO board connections"/>
 </p>
 
 
@@ -36,7 +36,7 @@ The battery capacity measurement is slightly skewed, because of how we measure i
 ## Software description
 
 <p align="center">
-  <img src="img/diagram.svg" alt="Arduino UNO board connections"/>
+  <img src="img/diagram.svg" width="500" alt="Arduino UNO board connections"/>
 </p>
 
 The internal ADC of the Atmega328 is used for voltage measurement. In the initialization phase, registers are set accordingly: 
@@ -62,7 +62,7 @@ ADCSRA = ADCSRA | (1 << ADPS2 | 1 << ADPS1 | 1 << ADPS0);
 
 1. Insert a 18650 Li-ion cell into the holder shown in the picture.
 <p align="center">
-  <img src="img/37b9d7837c459309-photo.JPG" alt="Holder img"/>
+  <img src="img/37b9d7837c459309-photo.JPG" width="500" alt="Holder img"/>
 </p>
 
 Then you can check volatage of battery and if its suitable for measurement.
@@ -75,22 +75,23 @@ Then you can check volatage of battery and if its suitable for measurement.
 
 2. If it's suitable you can press the <font color="green">green button</font> to start the measurement. 
 <p align="center">
-  <img src="img/150f92d110eb5226-photo.JPG" alt="Green button detail img"/>
+  <img src="img/150f92d110eb5226-photo.JPG" width="500" alt="Green button detail img"/>
 </p>
 
 3. After few second an internal resistence is shown on display. Other values are shown throughout the measurement.
 <p align="center">
-  <img src="img/17620b9d4dcf60ed-photo.JPG" alt="OLED detail img"/>
+  <img src="img/17620b9d4dcf60ed-photo.JPG" width="500" alt="OLED detail img"/>
 </p>
 
 4. After the measurement is finished, the values are shown on the display.
 <p align="center">
-  <img src="img/94419f8fc3a236d7-photo.JPG" alt="Finished screen detail img"/>
+  <img src="img/94419f8fc3a236d7-photo.JPG" width="500" alt="Finished screen detail img"/>
 </p>
 
 ## Demonstration
 
 [![Demo video](https://img.youtube.com/vi/g1Zs0lZ0VUw/0.jpg)](https://www.youtube.com/watch?v=g1Zs0lZ0VUw)
+
 
 ## References
 
