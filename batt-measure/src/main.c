@@ -46,29 +46,30 @@ volatile uint16_t TIM1_OVF_CNT; // Timer1 overflow counter
 
 int main(void)
 {
-    // Configure Analog-to-Digital Converter unit
-    // Select ADC voltage reference to "AVcc with external capacitor at AREF pin"
-    ADMUX |= (1 << REFS0);
-    // Select input channel ADC0 (voltage divider pin)
-    ADMUX &= ~(1 << MUX3 | 1 << MUX2 | 1 << MUX1 | 1 << MUX0); // puvodni
-    // Enable ADC module
-    ADCSRA |= (1 << ADEN);
-    // Enable conversion complete interrupt
-    ADCSRA |= (1 << ADIE);
-    // Set clock prescaler to 128
-    ADCSRA |= (1 << ADPS2 | 1 << ADPS1 | 1 << ADPS0);
+    batterymeter_init();
+    // // Configure Analog-to-Digital Converter unit
+    // // Select ADC voltage reference to "AVcc with external capacitor at AREF pin"
+    // ADMUX |= (1 << REFS0);
+    // // Select input channel ADC0 (voltage divider pin)
+    // ADMUX &= ~(1 << MUX3 | 1 << MUX2 | 1 << MUX1 | 1 << MUX0); // puvodni
+    // // Enable ADC module
+    // ADCSRA |= (1 << ADEN);
+    // // Enable conversion complete interrupt
+    // ADCSRA |= (1 << ADIE);
+    // // Set clock prescaler to 128
+    // ADCSRA |= (1 << ADPS2 | 1 << ADPS1 | 1 << ADPS0);
 
-    ////  INIT  ////
-    uart_init(UART_BAUD_SELECT(115200, F_CPU));
-    uart_puts("Init start\r\n");
+    // ////  INIT  ////
+    // uart_init(UART_BAUD_SELECT(115200, F_CPU));
+    // uart_puts("Init start\r\n");
 
-    // Configure 16-bit Timer/Counter1 to start ADC conversion
-    // Set prescaler to 262 ms and enable overflow interrupt
-    TIM1_OVF_1SEC
-    TIM1_OVF_ENABLE
+    // // Configure 16-bit Timer/Counter1 to start ADC conversion
+    // // Set prescaler to 262 ms and enable overflow interrupt
+    // TIM1_OVF_1SEC
+    // TIM1_OVF_ENABLE
 
-    // Enables interrupts by setting the global interrupt mask
-    sei();
+    // // Enables interrupts by setting the global interrupt mask
+    // sei();
 
     oled_init(OLED_DISP_ON); // Initialize OLED
     oled_clrscr();
