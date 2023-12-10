@@ -8,8 +8,12 @@
 #include <oled.h> 
 #include "batterymeter.h"
 
+// Global vars
+volatile float ADC_A0;          // Analog pin A0 voltage
+volatile uint16_t TIM1_OVF_CNT; // Timer1 overflow counter
 
 
+// Funcs
 void batterymeter_init()
 {
     uart_init(UART_BAUD_SELECT(115200, F_CPU));
@@ -29,5 +33,37 @@ void batterymeter_init()
     // Enables interrupts by setting the global interrupt mask
     sei();
 
+    GPIO_mode_output(&DDRB, Base_ON);
+    GPIO_write_high(&PORTB, Base_ON);
+    
+    oled_init(OLED_DISP_ON); // Initialize OLED
+    oled_set_contrast(255); // Contrast setting
+    oled_invert(1);
+    oled_clrscr();
+    
+    uart_puts("Init end\r\n");
+
+}
+
+void batterymeter_screen(unsigned int screenID)
+{
+    switch (screenID)
+    {
+    case 1:
+
+        uart_puts("Screen 1");    
+        oled_charMode(DOUBLESIZE);
+        oled_puts("BATT Meter");
+        oled_drawLine(0, 15, 128, 15, WHITE);
+
+        oled_charMode(NORMALSIZE);
+        oled_gotoxy(0, 5);  oled_puts("Press GREEN to start!");
+        oled_gotoxy(1, 6);  oled_puts("Press RED to pause!");
+        
+        break;
+    
+    default:
+        break;
+    } 
 
 }

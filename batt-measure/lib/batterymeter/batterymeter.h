@@ -41,8 +41,14 @@ License: MIT License
 
 /* Defines -----------------------------------------------------------*/
 /**
- * @name  Battery Meter initialization definitions
+ * @name  Battery Meter initialization and pin definitions
  */
+/** @brief PD2 is Start button for battery measurement */
+#define Start_button PD2 
+/** @brief PD3 is Stop button for battery measurement */
+#define Stop_button PD3  
+/** @brief PB0 is measurement trigger pin for external battery load circuit */
+#define Base_ON PB0      
 /** @brief Select ADC voltage reference to "AVcc with external capacitor at AREF pin" */
 #define ADC_INT_REF         ADMUX |= (1 << REFS0);
 /** @brief Select input channel ADC0 (voltage divider pin) */
@@ -65,11 +71,20 @@ License: MIT License
  * @name  Function prototypes for Battery Meter
  */
 /**
-   @brief   Initialize UART and set baudrate 
+   @brief   Initialize Battery Meter
    @param   none
    @return  none 
 */
 extern void batterymeter_init();
+
+/**
+   @brief   Select which screen to show
+   @param   screenID Specify screen ID. 1:  Starting screen
+                                        2:  Measurement screen
+                                        3:  Finished screen
+   @return  none 
+*/
+extern void batterymeter_screen(unsigned int screenID);
 
 
 /** @} */

@@ -47,7 +47,6 @@ volatile uint16_t TIM1_OVF_CNT; // Timer1 overflow counter
 
 int main(void)
 {
-    batterymeter_init();
     // // Configure Analog-to-Digital Converter unit
     // // Select ADC voltage reference to "AVcc with external capacitor at AREF pin"
     // ADMUX |= (1 << REFS0);
@@ -72,26 +71,31 @@ int main(void)
     // // Enables interrupts by setting the global interrupt mask
     // sei();
 
-    oled_init(OLED_DISP_ON); // Initialize OLED
-    oled_clrscr();
-    oled_set_contrast(255); // Contrast setting
-    oled_invert(1);
+    // oled_init(OLED_DISP_ON); // Initialize OLED
+    // oled_clrscr();
+    // oled_set_contrast(255); // Contrast setting
+    // oled_invert(1);
 
-    oled_charMode(DOUBLESIZE);
-    oled_puts("BATT Meter");
-    oled_drawLine(0, 15, 128, 15, WHITE);
+    // oled_charMode(DOUBLESIZE);
+    // oled_puts("BATT Meter");
+    // oled_drawLine(0, 15, 128, 15, WHITE);
 
-    oled_charMode(NORMALSIZE);
-    oled_gotoxy(0, 5);
-    oled_puts("Press GREEN to start!");
-    oled_gotoxy(1, 6);
-    oled_puts("Press RED to pause!");
+    // oled_charMode(NORMALSIZE);
+    // oled_gotoxy(0, 5);
+    // oled_puts("Press GREEN to start!");
+    // oled_gotoxy(1, 6);
+    // oled_puts("Press RED to pause!");
 
-    GPIO_mode_output(&DDRB, Base_ON);
-    GPIO_write_high(&PORTB, Base_ON);
+    // GPIO_mode_output(&DDRB, Base_ON);
+    // GPIO_write_high(&PORTB, Base_ON);
 
-    uart_puts("Init end\r\n");
+    // uart_puts("Init end\r\n");
     ////  END INIT  ////
+
+    batterymeter_init();
+
+    batterymeter_screen(1);
+
 
     //// Vars in while loop ////
     uint8_t isStarted = 0;
