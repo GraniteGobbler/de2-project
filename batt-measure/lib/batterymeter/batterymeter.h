@@ -36,7 +36,7 @@ License: MIT License
 #include <gpio.h>  //
 #include <uart.h>  // Peter Fleury's UART library
 #include <oled.h> 
-#include "timer.h" // Timer library for AVR-GCC
+#include "..\..\include\timer.h" // Timer library for AVR-GCC
 
 
 /* Defines -----------------------------------------------------------*/

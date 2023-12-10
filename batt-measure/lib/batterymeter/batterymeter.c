@@ -7,7 +7,6 @@
 #include <uart.h>  // Peter Fleury's UART library
 #include <oled.h> 
 #include "batterymeter.h"
-#include "timer.h" // Timer library for AVR-GCC
 
 
 

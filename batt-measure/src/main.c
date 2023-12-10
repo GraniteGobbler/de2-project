@@ -12,16 +12,17 @@
  **********************************************************************/
 
 /* Includes ----------------------------------------------------------*/
-#include <avr/io.h>        // AVR device-specific IO definitions
-#include <avr/interrupt.h> // Interrupts standard C library for AVR-GCC
-// #include <stdlib.h>        // C library. Needed for number conversions
-#include <stdio.h> // C library for IO operations
-#include <math.h>  // C library for math operations
+// #include <avr/io.h>        // AVR device-specific IO definitions
+// #include <avr/interrupt.h> // Interrupts standard C library for AVR-GCC
+// // #include <stdlib.h>        // C library. Needed for number conversions
+// #include <stdio.h> // C library for IO operations
+// #include <math.h>  // C library for math operations
 
-#include "timer.h" // Timer library for AVR-GCC
-#include <gpio.h>  //
-#include <uart.h>  // Peter Fleury's UART library
-#include <oled.h>  //
+
+// #include <gpio.h>  //
+// #include <uart.h>  // Peter Fleury's UART library
+// #include <oled.h>  //
+#include <batterymeter.h>
 
 /* Function definitions ----------------------------------------------*/
 /**********************************************************************
