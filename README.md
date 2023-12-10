@@ -112,4 +112,5 @@ Then you can check volatage of battery and if its suitable for measurement.
 ## References
 
 1. [Atmega328 datasheet](https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/40001906C.pdf)
-2. [Markdown Guide](https://www.markdownguide.org/)
+2. [DE2 Course Repository](https://github.com/tomas-fryza/digital-electronics-2)
+3. [Markdown Guide](https://www.markdownguide.org/)
