@@ -12,16 +12,6 @@
  **********************************************************************/
 
 /* Includes ----------------------------------------------------------*/
-// #include <avr/io.h>        // AVR device-specific IO definitions
-// #include <avr/interrupt.h> // Interrupts standard C library for AVR-GCC
-// // #include <stdlib.h>        // C library. Needed for number conversions
-// #include <stdio.h> // C library for IO operations
-// #include <math.h>  // C library for math operations
-
-
-// #include <gpio.h>  //
-// #include <uart.h>  // Peter Fleury's UART library
-// #include <oled.h>  //
 #include <batterymeter.h>
 
 /* Function definitions ----------------------------------------------*/
@@ -31,10 +21,6 @@
  *           When AD conversion ends, send converted value to LCD screen.
  * Returns:  none
  **********************************************************************/
-
-#define Start_button PD2 // PD2 is start button for battery measurement
-#define Stop_button PD3  // PD3 is stop button for battery measurement
-#define Base_ON PB0      // PB0 is measurement trigger pin for external battery load circuit
 
 #ifndef F_CPU
 #define F_CPU 16000000 // CPU frequency in Hz required for UART_BAUD_SELECT
@@ -47,55 +33,9 @@ volatile uint16_t TIM1_OVF_CNT; // Timer1 overflow counter
 
 int main(void)
 {
-    // // Configure Analog-to-Digital Converter unit
-    // // Select ADC voltage reference to "AVcc with external capacitor at AREF pin"
-    // ADMUX |= (1 << REFS0);
-    // // Select input channel ADC0 (voltage divider pin)
-    // ADMUX &= ~(1 << MUX3 | 1 << MUX2 | 1 << MUX1 | 1 << MUX0); // puvodni
-    // // Enable ADC module
-    // ADCSRA |= (1 << ADEN);
-    // // Enable conversion complete interrupt
-    // ADCSRA |= (1 << ADIE);
-    // // Set clock prescaler to 128
-    // ADCSRA |= (1 << ADPS2 | 1 << ADPS1 | 1 << ADPS0);
-
-    // ////  INIT  ////
-    // uart_init(UART_BAUD_SELECT(115200, F_CPU));
-    // uart_puts("Init start\r\n");
-
-    // // Configure 16-bit Timer/Counter1 to start ADC conversion
-    // // Set prescaler to 262 ms and enable overflow interrupt
-    // TIM1_OVF_1SEC
-    // TIM1_OVF_ENABLE
-
-    // // Enables interrupts by setting the global interrupt mask
-    // sei();
-
-    // oled_init(OLED_DISP_ON); // Initialize OLED
-    // oled_clrscr();
-    // oled_set_contrast(255); // Contrast setting
-    // oled_invert(1);
-
-    // oled_charMode(DOUBLESIZE);
-    // oled_puts("BATT Meter");
-    // oled_drawLine(0, 15, 128, 15, WHITE);
-
-    // oled_charMode(NORMALSIZE);
-    // oled_gotoxy(0, 5);
-    // oled_puts("Press GREEN to start!");
-    // oled_gotoxy(1, 6);
-    // oled_puts("Press RED to pause!");
-
-    // GPIO_mode_output(&DDRB, Base_ON);
-    // GPIO_write_high(&PORTB, Base_ON);
-
-    // uart_puts("Init end\r\n");
-    ////  END INIT  ////
-
     batterymeter_init();
 
-    batterymeter_screen(1);
-
+    batterymeter_change_scr(1);
 
     //// Vars in while loop ////
     uint8_t isStarted = 0;

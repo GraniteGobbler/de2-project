@@ -45,13 +45,13 @@ void batterymeter_init()
 
 }
 
-void batterymeter_screen(unsigned int screenID)
+void batterymeter_change_scr(unsigned int screenID)
 {
     switch (screenID)
     {
     case 1:
-
-        uart_puts("Screen 1");    
+        
+        uart_puts("Screen 1 \r\n");  
         oled_charMode(DOUBLESIZE);
         oled_puts("BATT Meter");
         oled_drawLine(0, 15, 128, 15, WHITE);

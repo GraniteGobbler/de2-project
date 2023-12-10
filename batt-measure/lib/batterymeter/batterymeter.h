@@ -84,7 +84,7 @@ extern void batterymeter_init();
                                         3:  Finished screen
    @return  none 
 */
-extern void batterymeter_screen(unsigned int screenID);
+extern void batterymeter_change_scr(unsigned int screenID);
 
 
 /** @} */
