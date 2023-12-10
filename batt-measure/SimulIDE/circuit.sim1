@@ -1,7 +1,7 @@
 <circuit version="1.0.0-SR1" rev="1402" stepSize="1000000" stepsPS="1000000" NLsteps="100000" reaStep="1000000" animate="0" >
 
-<item itemtype="Subcircuit" CircId="Uno-2" mainComp="false" Show_id="true" Show_Val="false" Pos="508,548" rotation="0" hflip="1" vflip="1" label="Uno-2" idLabPos="0,-20" labelrot="0" valLabPos="-16,20" valLabRot="0" Logic_Symbol="true">
-<mainCompProps itemtype="MCU" CircId="2_mega328-109" mainComp="true" Show_id="false" Show_Val="false" Pos="20,20" rotation="0" hflip="1" vflip="1" label="2_mega328-109" idLabPos="0,-20" labelrot="0" valLabPos="-16,20" valLabRot="0" Frequency="16 MHz" Auto_Load="false" Rst_enabled="true" Ext_Osc="true" Wdt_enabled="false" />
+<item itemtype="Subcircuit" CircId="Uno-2" mainComp="false" Show_id="true" Show_Val="false" Pos="504,548" rotation="0" hflip="1" vflip="1" label="Uno-2" idLabPos="0,-20" labelrot="0" valLabPos="-16,20" valLabRot="0" Logic_Symbol="true">
+<mainCompProps itemtype="MCU" CircId="2_mega328-109" mainComp="true" Show_id="false" Show_Val="false" Pos="20,20" rotation="0" hflip="1" vflip="1" label="2_mega328-109" idLabPos="0,-20" labelrot="0" valLabPos="-16,20" valLabRot="0" Frequency="16 MHz" Program="../.pio/build/uno/firmware.hex" Auto_Load="false" Rst_enabled="true" Ext_Osc="true" Wdt_enabled="false" />
 </item>
 
 <item itemtype="Ground" CircId="Ground-3" mainComp="false" Show_id="false" Show_Val="false" Pos="748,780" rotation="0" hflip="1" vflip="1" label="Ground-3" idLabPos="-16,8" labelrot="0" valLabPos="-16,20" valLabRot="0" />
@@ -34,7 +34,7 @@
 
 <item itemtype="Node" CircId="Node-139" mainComp="false" Pos="636,644" />
 
-<item itemtype="Connector" uid="connector-119" startpinid="Uno-2-3" endpinid="Node-19-0" pointList="564,684,700,684" />
+<item itemtype="Connector" uid="connector-119" startpinid="Uno-2-3" endpinid="Node-19-0" pointList="560,684,700,684" />
 
 <item itemtype="Connector" uid="connector-120" startpinid="Push-6-switch0pinN" endpinid="Node-25-0" pointList="740,748,748,748" />
 
@@ -48,7 +48,7 @@
 
 <item itemtype="Connector" uid="connector-125" startpinid="Resistor-10-rPin" endpinid="Node-42-0" pointList="700,736,700,748" />
 
-<item itemtype="Connector" uid="connector-126" startpinid="Uno-2-2" endpinid="Node-42-1" pointList="564,692,596,692,596,748,700,748" />
+<item itemtype="Connector" uid="connector-126" startpinid="Uno-2-2" endpinid="Node-42-1" pointList="560,692,596,692,596,748,700,748" />
 
 <item itemtype="Connector" uid="connector-127" startpinid="Node-42-2" endpinid="Push-6-pinP0" pointList="700,748,708,748" />
 
@@ -56,7 +56,7 @@
 
 <item itemtype="Connector" uid="connector-129" startpinid="Potentiometer-52-PinA" endpinid="Node-54-1" pointList="644,572,636,572" />
 
-<item itemtype="Connector" uid="connector-130" startpinid="Uno-2-A0" endpinid="Potentiometer-52-PinM" pointList="564,596,660,596,660,588" />
+<item itemtype="Connector" uid="connector-130" startpinid="Uno-2-A0" endpinid="Potentiometer-52-PinM" pointList="560,596,660,596,660,588" />
 
 <item itemtype="Connector" uid="connector-131" startpinid="Potentiometer-52-PinB" endpinid="Node-58-1" pointList="676,572,748,572,748,684" />
 
@@ -66,7 +66,7 @@
 
 <item itemtype="Connector" uid="connector-134" startpinid="Resistor-11-lPin" endpinid="Node-76-1" pointList="700,644,700,612,636,612" />
 
-<item itemtype="Connector" uid="connector-138" startpinid="Led-99-rPin" endpinid="Uno-2-8" pointList="584,644,564,644" />
+<item itemtype="Connector" uid="connector-138" startpinid="Led-99-rPin" endpinid="Uno-2-8" pointList="584,644,560,644" />
 
 <item itemtype="Connector" uid="connector-135" startpinid="Node-76-2" endpinid="Node-139-0" pointList="636,612,636,644" />
 

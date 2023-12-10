@@ -83,9 +83,11 @@ ISR(ADC_vect)
 
 Then you can check volatage of battery and if its suitable for measurement.
 
-- 4,2 ~ 4,1V battery is fully charged
-- 3,7 battery is charged halfway
-- <2,5V battery is discharged
+| Voltage [V]    | Status      |
+|    ----:   |    :----    |
+| 4,2 ~ 4,1 | Battery is fully charged |
+| 3,7 | Battery is charged halfway |
+| <2,5 | Battery is discharged |
 
 &nbsp;
 

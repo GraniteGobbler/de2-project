@@ -51,7 +51,10 @@ void batterymeter_change_scr(unsigned int screenID)
     {
     case 1:
         
-        uart_puts("Screen 1 \r\n");  
+        uart_puts("Screen 1\r\n");  
+
+        oled_clrscr();
+
         oled_charMode(DOUBLESIZE);
         oled_puts("BATT Meter");
         oled_drawLine(0, 15, 128, 15, WHITE);
@@ -61,9 +64,90 @@ void batterymeter_change_scr(unsigned int screenID)
         oled_gotoxy(1, 6);  oled_puts("Press RED to pause!");
         
         break;
-    
+
+    case 2:
+
+        uart_puts("Screen 2\r\n");
+
+        oled_clrscr();
+
+        oled_charMode(NORMALSIZE);
+        oled_gotoxy(0, 0);  oled_puts("IR:       _.___  mOhm");
+        oled_gotoxy(0, 2);  oled_puts("Voltage:  _.___   V");
+        oled_gotoxy(0, 3);  oled_puts("Current:  _.___   A");
+        oled_gotoxy(0, 4);  oled_puts("Capacity: _._     mAh");
+        oled_gotoxy(0, 5);  oled_puts("Energy:   _._     mWh");
+
+        break;
+
+    case 3:
+
+        // oled_charMode(DOUBLESIZE);
+        // oled_gotoxy(1, 0);
+        // oled_puts("Finished!");
+        // oled_drawLine(0, 15, 128, 15, WHITE);
+
+        // oled_charMode(NORMALSIZE);
+        // oled_gotoxy(0, 3);
+        // oled_puts("IR:       _.___  mOhm");
+        // oled_gotoxy(0, 4);
+        // oled_puts("Capacity: _._     mAh");
+        // oled_gotoxy(0, 5);
+        // oled_puts("Energy:   _._     mWh");
+        // oled_gotoxy(0, 7);
+        // oled_puts("Press RED to return!");
+
+        // oled_gotoxy(10, 3);
+        // oled_puts(cIR);
+        // oled_gotoxy(10, 4);
+        // oled_puts(cCap);
+        // oled_gotoxy(10, 5);
+        // oled_puts(cEne);
+
+        break;
+
     default:
+
+        uart_puts("Screen 1\r\n");  
+
+        oled_clrscr();
+
+        oled_charMode(DOUBLESIZE);
+        oled_puts("BATT Meter");
+        oled_drawLine(0, 15, 128, 15, WHITE);
+
+        oled_charMode(NORMALSIZE);
+        oled_gotoxy(0, 5);  oled_puts("Press GREEN to start!");
+        oled_gotoxy(1, 6);  oled_puts("Press RED to pause!");
+        
         break;
     } 
 
+}
+
+//  TOTO TREBA OPRAVIT  //
+void batterymeter_write_var(unsigned int x, unsigned int y, float value, char* string)
+{
+    char strOut[8];
+
+    oled_gotoxy(0,y);  oled_puts("                     ");
+
+    sprintf(strOut, string, value);
+    oled_gotoxy(x,y);   oled_puts(strOut);
+
+    uart_puts(strOut);
+    uart_puts("\r\n");
+
+}
+
+void batterymeter_clear_line(unsigned int y)
+{
+    oled_gotoxy(0,y);  oled_puts("                     ");
+}
+
+void batterymeter_stop_measure(unsigned char* flag)
+{
+    *flag = 0;
+    oled_clrscr();
+    GPIO_write_high(&PORTB, Base_ON);
 }

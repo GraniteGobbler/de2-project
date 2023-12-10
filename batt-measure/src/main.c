@@ -71,17 +71,7 @@ int main(void)
         {
             uart_puts("Measurement started!\r\n");
 
-            oled_clrscr();
-            oled_gotoxy(0, 0);
-            oled_puts("IR:       _.___  mOhm");
-            oled_gotoxy(0, 2);
-            oled_puts("Voltage:  _.___   V");
-            oled_gotoxy(0, 3);
-            oled_puts("Current:  _.___   A");
-            oled_gotoxy(0, 4);
-            oled_puts("Capacity: _._     mAh");
-            oled_gotoxy(0, 5);
-            oled_puts("Energy:   _._     mWh");
+            batterymeter_change_scr(2);
 
             Voltage_unloaded = ADC_A0; // Snapshot of unloaded voltage of battery
             sprintf(cVolt, "%.3f", Voltage_unloaded);
@@ -101,16 +91,7 @@ int main(void)
 
             uart_puts("Measurement stopped!\r\n");
 
-            oled_clrscr();
-            oled_charMode(DOUBLESIZE);
-            oled_puts("BATT Meter");
-            oled_drawLine(0, 15, 128, 15, WHITE); // oled_drawLine(x1, y1, x2, y2, color)
-
-            oled_charMode(NORMALSIZE);
-            oled_gotoxy(0, 5);
-            oled_puts("Press GREEN to start!");
-            oled_gotoxy(1, 6);
-            oled_puts("Press RED to pause!");
+            batterymeter_change_scr(1);
 
             isStarted = 0;
         }
@@ -120,23 +101,31 @@ int main(void)
             sprintf(cVolt, "Batt voltage: %.3f V", ADC_A0);
             oled_gotoxy(0, 3);
             oled_puts(cVolt);
+            
+            batterymeter_write_var(0, 3, ADC_A0, "Batt voltage: %.3f V");
 
             if (ADC_A0 <= 2.6)
             {
-                oled_gotoxy(0, 7);  oled_puts("                     ");
-                oled_gotoxy(1, 7);  oled_puts("Voltage is too low!");
+                // oled_gotoxy(0, 7);  oled_puts("                     ");
+                // oled_gotoxy(1, 7);  oled_puts("Voltage is too low!");
+                
+                // batterymeter_write_var(1, 7, 0.0, "Voltage is too low!");
+
             }
             else if (ADC_A0 >= 4.1)
             {
-                oled_gotoxy(0, 7);  oled_puts("BATT is 100% charged!");
+                // oled_gotoxy(0, 7);  oled_puts("BATT is 100% charged!");
+                
+                // batterymeter_write_var(0, 7, 0.0, "BATT is 100% charged!");
             }
             else
             {
-                oled_gotoxy(0, 7);  oled_puts("                     ");
-                oled_gotoxy(6, 7);  oled_puts("Battery OK!");
+                // oled_gotoxy(0, 7);  oled_puts("                     ");
+                // oled_gotoxy(6, 7);  oled_puts("Battery OK!");
+                
+                // batterymeter_write_var(6, 7, 0.0, "Battery OK!");
             }
-            // uart_puts(cVolt);
-            // uart_puts("\r\n");
+
         }
 
         if (isStarted == 1)
@@ -165,12 +154,15 @@ int main(void)
 
                 if (Voltage <= 2.5)
                 {
-                    isStarted = 0;
                     uart_puts("Measurement finished!\r\n");
 
-                    oled_clrscr();
+                    // isStarted = 0;
+                    // oled_clrscr();
+                    // GPIO_write_high(&PORTB, Base_ON);
+                    
+                    batterymeter_stop_measure(&isStarted);
 
-                    GPIO_write_high(&PORTB, Base_ON);
+
 
                     while ((GPIO_read(&PIND, Stop_button) == 1) & (Capacity != 0.0))
                     {

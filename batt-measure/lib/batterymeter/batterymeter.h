@@ -86,6 +86,30 @@ extern void batterymeter_init();
 */
 extern void batterymeter_change_scr(unsigned int screenID);
 
+/**
+   @brief   Write formatted variable with optional string into OLED RAM
+   @param   x   x coordinate for virtual text cursor in oled_gotoxy(x,y)
+   @param   y   y coordinate for virtual text cursor in oled_gotoxy(x,y)
+   @param   value   Value of chosen variable to be formatted
+   @param   string  Optional string to be formatted
+   @return  none 
+*/
+extern void batterymeter_write_var(unsigned int x, unsigned int y, float value, char* string);
+
+/**
+   @brief   Clear line on OLED display
+   @param   y Line number
+   @return  none 
+*/
+extern void batterymeter_clear_line(unsigned int y);
+
+/**
+   @brief   Stop measurement
+   @param   isStarted Status flag.  1: started
+                                    0: stopped
+   @return  none 
+*/
+void batterymeter_stop_measure(unsigned char* isStarted);
 
 /** @} */
 
