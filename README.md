@@ -17,14 +17,14 @@
 We decided to construct user friendly 18650 battery tester. We can measure voltage, current, capacity in mAh, energy in mWh and DC internal resistance. These values are shown on the OLED display. The whole application is controlled by 2 buttons. Clocking the measurement of battery voltage once every second, one can simply calculate the other quantities by adding the increments together every second. This accumulates the capacity and energy values and the results are shown automatically after the measurement concludes.
 
 ## Hardware description of demo application
-**Schematic of Arduino UNO board**
+### Schematic of Arduino UNO board
 <p align="center">
   <img src="img/board.svg" alt="Arduino UNO board connections"/>
 </p>
 
 We used 2 buttons connected to digital pins `PD2` (Start button) and `PD3` (Pause/Stop button). The green one starts measurement and the red is used to pause the measurement. OLED display is connected to `SDA` and `SCL` pins. Our discharging circuit is connected to `PD8` and Analog pins `A0`.  
 
-**Schematic of battery discharging circuit**
+### Schematic of battery discharging circuit
 <p align="center">
   <img src="img/BATT Meas Circuit.svg" alt="Schematic of battery discharging circuit"/>
 </p>
@@ -32,6 +32,27 @@ We used 2 buttons connected to digital pins `PD2` (Start button) and `PD3` (Paus
 The discharging circuit consists of a IRF8010 MOSFET as a switch that is controlled by a BC557 BJT. The base of the BJT is connected via 10 kΩ resistor to the `PB0` digital pin. The circuit resistance has to be measured separately, as we are using only a single analog pin for voltage measurement. 
 
 The battery capacity measurement is slightly skewed, because of how we measure internal resistance of the cell, which is calculated 3 seconds after the measurement is started. This approach is **not** the most accurate, but very simple and requires no muxing of the ADC inputs which could lead to timing inconsistencies.
+
+### SimulIDE circuit
+Some screenshots of the Arduino board side circuit with UART console open.
+
+**The program is waiting for user input**
+
+<p align="center">
+  <img src="img/simulide_circuit.png" alt="Waiting for input"/>
+</p>
+
+**Measurement started**
+
+<p align="center">
+  <img src="img/simulide_measure.png" alt="Measuring"/>
+</p>
+
+**Measurement finished, notice the potentiometer slider position**
+
+<p align="center">
+  <img src="img/simulide_finished.png" alt="Finished"/>
+</p>
 
 ## Software description
 
@@ -70,9 +91,48 @@ ISR(ADC_vect)
 }
 ```
 
+The current measurement is done through calculation. The result is slightly higher during the first 3 seconds of the measurement due to `R_bat` being equal to `0.0`.
 
-`R_bat = (Voltage_unloaded - Voltage_dropped) / Current`
+``` c
+Current = Voltage / fabs(R_circ + R_bat);
+```
 
+The internal resistance is calculated 3 seconds after the measurement is started, so that the battery experiences a voltage drop. The `if` condition is there to ensure that the internal resistance is calculated only once. The `Voltage_dropped` variable stores a snapshot of the current voltage.
+
+``` c
+if ((TIM1_OVF_CNT == 3) & (R_bat == 0)) // If time == 3sec, measure dropped voltage
+{
+  Voltage_dropped = Voltage;
+  R_bat = (Voltage_unloaded - Voltage_dropped) / Current;
+}
+```
+
+Capacity (not to be confused with capacitance) is incremented every second and calculated from the discharge current. The increments are in [mAs] and are converted to [mAh] once they are cumulatively added. Same goes for energy, which is in [mWh]. It is calculated similarly as capacity, but multiplied by `Voltage` since `P = U·I`.
+
+``` c
+Capacity_increment = (1000 * Current);             // [mAs]
+Capacity = Capacity + (Capacity_increment / 3600); // [mAh]
+
+Energy_increment = Capacity_increment * Voltage; // [mWs]
+Energy = Energy + (Energy_increment / 3600);     // [mWh]
+
+```
+
+During the measurement the electrical quantities are shown on the display and updated every second. The `oled_puts();` function is required in order to write a string into the OLED RAM. We write a lot into that RAM and usually specify the exact spot on the display. For that we have devised a simple function that accepts values of variables. It also sends that string via UART for debugging purposes.
+
+``` c
+void batterymeter_write_var(unsigned int x, unsigned int y, float value, char* string)
+{
+    char strOut[32];
+
+    sprintf(strOut, string, value);
+    oled_gotoxy(x,y);   oled_puts(strOut);
+
+    uart_puts(strOut);
+    uart_puts("\r\n");
+
+}
+```
 
 ## Instructions
 
