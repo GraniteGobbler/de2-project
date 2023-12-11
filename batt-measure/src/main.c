@@ -139,7 +139,7 @@ int main(void)
         {
             // Measurement logic //
             Voltage = ADC_A0 - 0.05;
-            Current = Voltage / fabs(R_circ + R_bat);
+            Current = Voltage / (R_circ + fabs(R_bat));
                     
             // Start measuring time
             if ((TIM1_OVF_CNT == 3) & (R_bat == 0)) // If time == 4sec, measure dropped voltage
