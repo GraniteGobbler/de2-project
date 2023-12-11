@@ -26,7 +26,7 @@ We used 2 buttons connected to digital pins `PD2` (Start button) and `PD3` (Paus
 
 ### Schematic of battery discharging circuit
 <p align="center">
-  <img src="img/BATT Meas Circuit.svg" alt="Schematic of battery discharging circuit"/>
+  <img src="img/BATT Meas Circuit_2.svg" alt="Schematic of battery discharging circuit"/>
 </p>
 
 The discharging circuit consists of a IRF8010 MOSFET as a switch that is controlled by a BC557 BJT. The base of the BJT is connected via 10 kΩ resistor to the `PB0` digital pin. The circuit resistance has to be measured separately, as we are using only a single analog pin for voltage measurement. 
