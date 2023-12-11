@@ -97,12 +97,6 @@ void batterymeter_change_scr(unsigned int screenID)
         oled_gotoxy(0, 5);  oled_puts("Energy:   _._     mWh");
         oled_gotoxy(0, 7);  oled_puts("Press RED to return!");
 
-        // oled_gotoxy(10, 3); oled_puts(&cIR);
-        // oled_gotoxy(10, 4);
-        // oled_puts(cCap);
-        // oled_gotoxy(10, 5);
-        // oled_puts(cEne);
-
         break;
 
     default:
@@ -142,6 +136,15 @@ void batterymeter_write_line(unsigned int x, unsigned int y, char* string)
 
     uart_puts(string);
     uart_puts("\r\n");
+}
+
+void batterymeter_uart_puts(float value, char* string)
+{
+    char strOut[32];
+    
+    sprintf(strOut, string, value);
+    uart_puts(strOut);
+
 }
 
 void batterymeter_clear_line(unsigned int y)

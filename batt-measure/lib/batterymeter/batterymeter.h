@@ -106,6 +106,14 @@ extern void batterymeter_write_var(unsigned int x, unsigned int y, float value, 
 extern void batterymeter_write_line(unsigned int x, unsigned int y, char* string);
 
 /**
+   @brief   Put formatted string into UART, that contains a variable
+   @param   value    Variable value to be formatted
+   @param   string   String output for UART
+   @return  none 
+*/
+extern void batterymeter_uart_puts(float value, char* string);
+
+/**
    @brief   Clear line on OLED display
    @param   y Line number
    @return  none 

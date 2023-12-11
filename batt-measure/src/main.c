@@ -31,6 +31,7 @@
 volatile float ADC_A0;          // Analog pin A0 voltage
 volatile uint16_t TIM1_OVF_CNT; // Timer1 overflow counter
 
+
 int main(void)
 {
     batterymeter_init();
@@ -58,11 +59,11 @@ int main(void)
     float R_circ = 1.11265; // Total circuit resistance
     float R_bat = 0.0;      // Internal resistance of battery
 
-    char cVolt[8];
-    char cCurr[8];
-    char cIR[8];
-    char cCap[8];
-    char cEne[8];
+    // char cVolt[8];
+    // char cCurr[8];
+    // char cIR[8];
+    // char cCap[8];
+    // char cEne[8];
 
     // Infinite loop
     while (1)
@@ -74,11 +75,14 @@ int main(void)
             batterymeter_change_scr(2);
 
             Voltage_unloaded = ADC_A0; // Snapshot of unloaded voltage of battery
-            sprintf(cVolt, "%.3f", Voltage_unloaded);
+            
+            batterymeter_uart_puts(Voltage_unloaded, "Unloaded Voltage: %.3f V");
+            
+            // sprintf(cVolt, "%.3f", Voltage_unloaded);
 
-            uart_puts("Unloaded Voltage: ");
-            uart_puts(cVolt);
-            uart_puts("\r\n");
+            // uart_puts("Unloaded Voltage: ");
+            // uart_puts(cVolt);
+            // uart_puts("\r\n");
 
             GPIO_write_low(&PORTB, Base_ON);
             TIM1_OVF_CNT = 0; // Reset timer overflow counter
@@ -169,9 +173,9 @@ int main(void)
                     {
                         batterymeter_change_scr(3);
 
-                        batterymeter_write_line(10,3,cIR);
-                        batterymeter_write_line(10,4,cCap);
-                        batterymeter_write_line(10,5,cEne);
+                        batterymeter_write_var(10,3,R_bat*1000,"%.3f");
+                        batterymeter_write_var(10,4,Capacity,"%.1f");
+                        batterymeter_write_var(10,5,Energy,"%.1f");
 
                         // oled_gotoxy(10, 3);
                         // oled_puts(cIR);
