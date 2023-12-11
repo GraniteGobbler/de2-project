@@ -91,10 +91,10 @@ ISR(ADC_vect)
 }
 ```
 
-The current measurement is done through calculation. The result is slightly higher during the first 3 seconds of the measurement due to `R_bat` being equal to `0.0`.
+The current measurement is done through calculation. The result is slightly higher during the first 3 seconds of the measurement due to `R_bat` being equal to `0.0`. The `fabs(R_bat)` returns the absolute value of `R_bat`. There are some rare edge cases where the voltage can be negative, this makes sure `R_bat` is always positive.
 
 ``` c
-Current = Voltage / fabs(R_circ + R_bat);
+Current = Voltage / (R_circ + fabs(R_bat));
 ```
 
 The internal resistance is calculated 3 seconds after the measurement is started, so that the battery experiences a voltage drop. The `if` condition is there to ensure that the internal resistance is calculated only once. The `Voltage_dropped` variable stores a snapshot of the current voltage.
