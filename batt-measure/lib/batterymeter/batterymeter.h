@@ -59,6 +59,10 @@ License: MIT License
 #define ADC_ISR_ENABLE      ADCSRA |= (1 << ADIE);
 /** @brief Set clock prescaler to 128 → F_CPU/PS = 125 kHz ADC clock @16 MHz */
 #define ADC_PS_128          ADCSRA |= (1 << ADPS2 | 1 << ADPS1 | 1 << ADPS0);
+/** @brief Set the CPU clock frequency to 16 MHz, required by UART */
+#ifndef F_CPU
+#define F_CPU 16000000
+#endif
 
 /**
  * @name  

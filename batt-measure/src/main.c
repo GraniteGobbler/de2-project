@@ -22,10 +22,10 @@
  * Returns:  none
  **********************************************************************/
 
-#ifndef F_CPU
-#define F_CPU 16000000 // CPU frequency in Hz required for UART_BAUD_SELECT
+// #ifndef F_CPU
+// #define F_CPU 16000000 // CPU frequency in Hz required for UART_BAUD_SELECT
 
-#endif
+// #endif
 
 // Global vars
 volatile float ADC_A0;          // Analog pin A0 voltage
@@ -202,7 +202,7 @@ int main(void)
                     continue;
 
                     // while ((GPIO_read(&PIND, Stop_button) == 1) & (Capacity != 0.0))
-                    {
+                    // {
                         // oled_charMode(DOUBLESIZE);
                         // oled_gotoxy(1, 0);
                         // oled_puts("Finished!");
@@ -226,7 +226,7 @@ int main(void)
                         // oled_puts(cEne);
 
                         // oled_display();
-                    }
+                    // }
 
                     // oled_clrscr();
 
