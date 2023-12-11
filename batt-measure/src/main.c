@@ -248,7 +248,7 @@ int main(void)
                     // continue;
                 }
 
-                // Displaying logic //
+                // Displaying logic, minus sign position correction //
                 if (floor(Voltage) == 0.0) // Is 0 V?
                 {
                     // oled_gotoxy(9, 2);

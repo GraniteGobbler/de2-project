@@ -29,7 +29,7 @@ We used 2 buttons connected to digital pins `PD2` (Start button) and `PD3` (Paus
   <img src="img/BATT Meas Circuit_2.svg" alt="Schematic of battery discharging circuit"/>
 </p>
 
-The discharging circuit consists of a IRF8010 MOSFET as a switch that is controlled by a BC557 BJT. The base of the BJT is connected via 10 kΩ resistor to the `PB0` digital pin. The circuit resistance has to be measured separately, as we are using only a single analog pin for voltage measurement. 
+The discharging circuit consists of a IRF8010 MOSFET as a switch that is controlled by a BC557 BJT. The base of the BJT is connected via 10 kΩ resistor to the `PB0` digital pin. A red LED is turned on when the BJT is switched. The circuit resistance has to be measured separately, as we are using only a single analog pin for voltage measurement. 
 
 The battery capacity measurement is slightly skewed, because of how we measure internal resistance of the cell, which is calculated 3 seconds after the measurement is started. This approach is **not** the most accurate, but very simple and requires no muxing of the ADC inputs which could lead to timing inconsistencies.
 
@@ -133,6 +133,8 @@ void batterymeter_write_var(unsigned int x, unsigned int y, float value, char* s
 
 }
 ```
+
+The measurement is stopped if the voltage gets to 2,5 V. The results are then shown on the screen and the program is waiting for the user to press the red button to return to the main screen. Once the button is pressed, the `R_bat`, `Capacity` and `Energy` variables are reset to `0.0`. A new measurement can begin.
 
 ## Instructions
 
