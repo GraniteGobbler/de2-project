@@ -82,23 +82,22 @@ void batterymeter_change_scr(unsigned int screenID)
 
     case 3:
 
-        // oled_charMode(DOUBLESIZE);
-        // oled_gotoxy(1, 0);
-        // oled_puts("Finished!");
-        // oled_drawLine(0, 15, 128, 15, WHITE);
+        uart_puts("Screen 3\r\n");
 
-        // oled_charMode(NORMALSIZE);
-        // oled_gotoxy(0, 3);
-        // oled_puts("IR:       _.___  mOhm");
-        // oled_gotoxy(0, 4);
-        // oled_puts("Capacity: _._     mAh");
-        // oled_gotoxy(0, 5);
-        // oled_puts("Energy:   _._     mWh");
-        // oled_gotoxy(0, 7);
-        // oled_puts("Press RED to return!");
+        oled_clrscr();
+        
+        oled_charMode(DOUBLESIZE);
+        oled_gotoxy(1, 0);
+        oled_puts("Finished!");
+        oled_drawLine(0, 15, 128, 15, WHITE);
 
-        // oled_gotoxy(10, 3);
-        // oled_puts(cIR);
+        oled_charMode(NORMALSIZE);
+        oled_gotoxy(0, 3);  oled_puts("IR:       _.___  mOhm");
+        oled_gotoxy(0, 4);  oled_puts("Capacity: _._     mAh");
+        oled_gotoxy(0, 5);  oled_puts("Energy:   _._     mWh");
+        oled_gotoxy(0, 7);  oled_puts("Press RED to return!");
+
+        // oled_gotoxy(10, 3); oled_puts(&cIR);
         // oled_gotoxy(10, 4);
         // oled_puts(cCap);
         // oled_gotoxy(10, 5);
@@ -125,12 +124,9 @@ void batterymeter_change_scr(unsigned int screenID)
 
 }
 
-//  TOTO TREBA OPRAVIT  //
 void batterymeter_write_var(unsigned int x, unsigned int y, float value, char* string)
 {
-    char strOut[8];
-
-    oled_gotoxy(0,y);  oled_puts("                     ");
+    char strOut[32];
 
     sprintf(strOut, string, value);
     oled_gotoxy(x,y);   oled_puts(strOut);
@@ -138,6 +134,14 @@ void batterymeter_write_var(unsigned int x, unsigned int y, float value, char* s
     uart_puts(strOut);
     uart_puts("\r\n");
 
+}
+
+void batterymeter_write_line(unsigned int x, unsigned int y, char* string)
+{
+    oled_gotoxy(x,y);   oled_puts(string);
+
+    uart_puts(string);
+    uart_puts("\r\n");
 }
 
 void batterymeter_clear_line(unsigned int y)

@@ -75,7 +75,7 @@ License: MIT License
    @param   none
    @return  none 
 */
-extern void batterymeter_init();
+extern void batterymeter_init(void);
 
 /**
    @brief   Select which screen to show
@@ -97,6 +97,15 @@ extern void batterymeter_change_scr(unsigned int screenID);
 extern void batterymeter_write_var(unsigned int x, unsigned int y, float value, char* string);
 
 /**
+   @brief   Write formatted string into OLED RAM
+   @param   x   x coordinate for virtual text cursor in oled_gotoxy(x,y)
+   @param   y   y coordinate for virtual text cursor in oled_gotoxy(x,y)
+   @param   string  String output
+   @return  none 
+*/
+extern void batterymeter_write_line(unsigned int x, unsigned int y, char* string);
+
+/**
    @brief   Clear line on OLED display
    @param   y Line number
    @return  none 
@@ -109,7 +118,7 @@ extern void batterymeter_clear_line(unsigned int y);
                                     0: stopped
    @return  none 
 */
-void batterymeter_stop_measure(unsigned char* isStarted);
+extern void batterymeter_stop_measure(unsigned char* isStarted);
 
 /** @} */
 

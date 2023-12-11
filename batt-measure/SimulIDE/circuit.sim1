@@ -16,7 +16,7 @@
 
 <item itemtype="Resistor" CircId="Resistor-11" mainComp="false" ShowProp="Resistance" Show_id="false" Show_Val="true" Pos="700,660" rotation="90" hflip="1" vflip="1" label="Resistor-11" idLabPos="-16,-24" labelrot="0" valLabPos="-16,6" valLabRot="0" Resistance="1000 Ω" />
 
-<item itemtype="Potentiometer" CircId="Potentiometer-52" mainComp="false" ShowProp="Value_Ohm" Show_id="false" Show_Val="true" Pos="660,572" rotation="0" hflip="1" vflip="1" label="Potentiometer-52" idLabPos="-16,-40" labelrot="0" valLabPos="15,-20" valLabRot="0" Resistance="10 kΩ" Value_Ohm="0 Ω" />
+<item itemtype="Potentiometer" CircId="Potentiometer-52" mainComp="false" ShowProp="Value_Ohm" Show_id="false" Show_Val="true" Pos="660,572" rotation="0" hflip="1" vflip="1" label="Potentiometer-52" idLabPos="-16,-40" labelrot="0" valLabPos="15,-20" valLabRot="0" Resistance="10 kΩ" Value_Ohm="2800 Ω" />
 
 <item itemtype="Led" CircId="Led-99" mainComp="false" Show_id="true" Show_Val="false" Pos="600,644" rotation="540" hflip="1" vflip="1" label="BJT  Switched?" idLabPos="31,24" labelrot="-180" valLabPos="-16,20" valLabRot="0" Color="Green" Grounded="false" Threshold="3.5 V" MaxCurrent="0.03 A" Resistance="0.6 Ω" />
 
@@ -34,44 +34,44 @@
 
 <item itemtype="Node" CircId="Node-139" mainComp="false" Pos="636,644" />
 
-<item itemtype="Connector" uid="connector-119" startpinid="Uno-2-3" endpinid="Node-19-0" pointList="560,684,700,684" />
+<item itemtype="Connector" uid="connector-140" startpinid="Uno-2-3" endpinid="Node-19-0" pointList="560,684,700,684" />
 
-<item itemtype="Connector" uid="connector-120" startpinid="Push-6-switch0pinN" endpinid="Node-25-0" pointList="740,748,748,748" />
+<item itemtype="Connector" uid="connector-141" startpinid="Push-6-switch0pinN" endpinid="Node-25-0" pointList="740,748,748,748" />
 
-<item itemtype="Connector" uid="connector-121" startpinid="Resistor-11-rPin" endpinid="Node-19-1" pointList="700,676,700,684" />
+<item itemtype="Connector" uid="connector-142" startpinid="Resistor-11-rPin" endpinid="Node-19-1" pointList="700,676,700,684" />
 
-<item itemtype="Connector" uid="connector-122" startpinid="Node-19-2" endpinid="Push-7-pinP0" pointList="700,684,708,684" />
+<item itemtype="Connector" uid="connector-143" startpinid="Node-19-2" endpinid="Push-7-pinP0" pointList="700,684,708,684" />
 
-<item itemtype="Connector" uid="connector-123" startpinid="Push-7-switch0pinN" endpinid="Node-58-0" pointList="740,684,748,684" />
+<item itemtype="Connector" uid="connector-144" startpinid="Push-7-switch0pinN" endpinid="Node-58-0" pointList="740,684,748,684" />
 
-<item itemtype="Connector" uid="connector-124" startpinid="Node-25-2" endpinid="Ground-3-Gnd" pointList="748,748,748,764" />
+<item itemtype="Connector" uid="connector-145" startpinid="Node-25-2" endpinid="Ground-3-Gnd" pointList="748,748,748,764" />
 
-<item itemtype="Connector" uid="connector-125" startpinid="Resistor-10-rPin" endpinid="Node-42-0" pointList="700,736,700,748" />
+<item itemtype="Connector" uid="connector-146" startpinid="Resistor-10-rPin" endpinid="Node-42-0" pointList="700,736,700,748" />
 
-<item itemtype="Connector" uid="connector-126" startpinid="Uno-2-2" endpinid="Node-42-1" pointList="560,692,596,692,596,748,700,748" />
+<item itemtype="Connector" uid="connector-147" startpinid="Uno-2-2" endpinid="Node-42-1" pointList="560,692,596,692,596,748,700,748" />
 
-<item itemtype="Connector" uid="connector-127" startpinid="Node-42-2" endpinid="Push-6-pinP0" pointList="700,748,708,748" />
+<item itemtype="Connector" uid="connector-148" startpinid="Node-42-2" endpinid="Push-6-pinP0" pointList="700,748,708,748" />
 
-<item itemtype="Connector" uid="connector-128" startpinid="Rail-4-outnod" endpinid="Node-54-0" pointList="636,560,636,572" />
+<item itemtype="Connector" uid="connector-149" startpinid="Rail-4-outnod" endpinid="Node-54-0" pointList="636,560,636,572" />
 
-<item itemtype="Connector" uid="connector-129" startpinid="Potentiometer-52-PinA" endpinid="Node-54-1" pointList="644,572,636,572" />
+<item itemtype="Connector" uid="connector-150" startpinid="Potentiometer-52-PinA" endpinid="Node-54-1" pointList="644,572,636,572" />
 
-<item itemtype="Connector" uid="connector-130" startpinid="Uno-2-A0" endpinid="Potentiometer-52-PinM" pointList="560,596,660,596,660,588" />
+<item itemtype="Connector" uid="connector-151" startpinid="Uno-2-A0" endpinid="Potentiometer-52-PinM" pointList="560,596,660,596,660,588" />
 
-<item itemtype="Connector" uid="connector-131" startpinid="Potentiometer-52-PinB" endpinid="Node-58-1" pointList="676,572,748,572,748,684" />
+<item itemtype="Connector" uid="connector-152" startpinid="Potentiometer-52-PinB" endpinid="Node-58-1" pointList="676,572,748,572,748,684" />
 
-<item itemtype="Connector" uid="connector-132" startpinid="Node-58-2" endpinid="Node-25-1" pointList="748,684,748,748" />
+<item itemtype="Connector" uid="connector-153" startpinid="Node-58-2" endpinid="Node-25-1" pointList="748,684,748,748" />
 
-<item itemtype="Connector" uid="connector-133" startpinid="Node-54-2" endpinid="Node-76-0" pointList="636,572,636,612" />
+<item itemtype="Connector" uid="connector-154" startpinid="Node-54-2" endpinid="Node-76-0" pointList="636,572,636,612" />
 
-<item itemtype="Connector" uid="connector-134" startpinid="Resistor-11-lPin" endpinid="Node-76-1" pointList="700,644,700,612,636,612" />
+<item itemtype="Connector" uid="connector-155" startpinid="Resistor-11-lPin" endpinid="Node-76-1" pointList="700,644,700,612,636,612" />
 
-<item itemtype="Connector" uid="connector-138" startpinid="Led-99-rPin" endpinid="Uno-2-8" pointList="584,644,560,644" />
+<item itemtype="Connector" uid="connector-156" startpinid="Led-99-rPin" endpinid="Uno-2-8" pointList="584,644,560,644" />
 
-<item itemtype="Connector" uid="connector-135" startpinid="Node-76-2" endpinid="Node-139-0" pointList="636,612,636,644" />
+<item itemtype="Connector" uid="connector-157" startpinid="Node-76-2" endpinid="Node-139-0" pointList="636,612,636,644" />
 
-<item itemtype="Connector" uid="Connector-140" startpinid="Node-139-2" endpinid="Led-99-lPin" pointList="636,644,616,644" />
+<item itemtype="Connector" uid="connector-158" startpinid="Node-139-2" endpinid="Led-99-lPin" pointList="636,644,616,644" />
 
-<item itemtype="Connector" uid="Connector-141" startpinid="Node-139-1" endpinid="Resistor-10-lPin" pointList="636,644,636,700,700,700,700,704" />
+<item itemtype="Connector" uid="connector-159" startpinid="Node-139-1" endpinid="Resistor-10-lPin" pointList="636,644,636,700,700,700,700,704" />
 
 </circuit>
