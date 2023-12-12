@@ -57,7 +57,7 @@ Some screenshots of the Arduino board side circuit with UART console open.
 ## Software description
  
 <p align="center">
-  <img src="img/diagram.svg" width="700" alt="Program flow chart"/>
+  <img src="img/func_diagram.svg" width="700" alt="Program flow chart"/>
 </p>
 
 The internal ADC of the Atmega328 is used for voltage measurement. In the initialization phase, registers are set accordingly: 
