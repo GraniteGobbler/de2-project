@@ -1,0 +1,16 @@
+\doxysection{lib/gpio/gpio.h File Reference}
+\hypertarget{gpio_8h}{}\label{gpio_8h}\index{lib/gpio/gpio.h@{lib/gpio/gpio.h}}
+{\ttfamily \#include $<$avr/io.\+h$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{group__fryza__gpio_gae4c211fcf0878fc6617e21dcfe7a4513}{GPIO\+\_\+mode\+\_\+output}} (volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}reg, uint8\+\_\+t pin)
+\begin{DoxyCompactList}\small\item\em Configure one output pin. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__fryza__gpio_ga1ad7cbb1e25a69cd4ec9ecb780a78e88}{GPIO\+\_\+mode\+\_\+input\+\_\+pullup}} (volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}reg, uint8\+\_\+t pin)
+\begin{DoxyCompactList}\small\item\em Configure one input pin and enable pull-\/up. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__fryza__gpio_gacea0f20416113eb2286b6bd730e22daa}{GPIO\+\_\+write\+\_\+low}} (volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}reg, uint8\+\_\+t pin)
+\begin{DoxyCompactList}\small\item\em Write one pin to low value. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__fryza__gpio_gabd54283301ad4e85b31c126f2fc316c7}{GPIO\+\_\+write\+\_\+high}} (volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}reg, uint8\+\_\+t pin)
+\begin{DoxyCompactList}\small\item\em Write one pin to high value. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{group__fryza__gpio_gacc9e9839904344a3be4549d8622342f5}{GPIO\+\_\+read}} (volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}reg, uint8\+\_\+t pin)
+\begin{DoxyCompactList}\small\item\em Read a value from input pin. \end{DoxyCompactList}\end{DoxyCompactItemize}

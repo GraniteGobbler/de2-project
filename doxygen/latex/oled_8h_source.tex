@@ -1,0 +1,153 @@
+\doxysection{oled.\+h}
+\hypertarget{oled_8h_source}{}\label{oled_8h_source}\index{lib/oled/oled.h@{lib/oled/oled.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ This\ file\ is\ part\ of\ lcd\ library\ for\ ssd1306/ssd1309/sh1106\ oled-\/display.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ lcd\ library\ for\ ssd1306/ssd1309/sh1106\ oled-\/display\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ it\ under\ the\ terms\ of\ the\ GNU\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ *\ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or\ any\ later\ version.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ *\ lcd\ library\ for\ ssd1306/ssd1309/sh1106\ oled-\/display\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ *\ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ *\ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ *\ GNU\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ *\ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ General\ Public\ License}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ *\ along\ with\ Foobar.\ \ If\ not,\ see\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ *\ Diese\ Datei\ ist\ Teil\ von\ lcd\ library\ for\ ssd1306/ssd1309/sh1106\ oled-\/display.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ lcd\ library\ for\ ssd1306/ssd1309/sh1106\ oled-\/display\ ist\ Freie\ Software:\ Sie\ können\ es\ unter\ den\ Bedingungen}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ der\ GNU\ General\ Public\ License,\ wie\ von\ der\ Free\ Software\ Foundation,}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ Version\ 3\ der\ Lizenz\ oder\ jeder\ späteren}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ veröffentlichten\ Version,\ weiterverbreiten\ und/oder\ modifizieren.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ lcd\ library\ for\ ssd1306/ssd1309/sh1106\ oled-\/display\ wird\ in\ der\ Hoffnung,\ dass\ es\ nützlich\ sein\ wird,\ aber}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ OHNE\ JEDE\ GEWÄHRLEISTUNG,\ bereitgestellt;\ sogar\ ohne\ die\ implizite}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ Gewährleistung\ der\ MARKTFÄHIGKEIT\ oder\ EIGNUNG\ FÜR\ EINEN\ BESTIMMTEN\ ZWECK.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ Siehe\ die\ GNU\ General\ Public\ License\ für\ weitere\ Details.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ Sie\ sollten\ eine\ Kopie\ der\ GNU\ General\ Public\ License\ zusammen\ mit\ diesem}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ Programm\ erhalten\ haben.\ Wenn\ nicht,\ siehe\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ \ lcd.h}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ \ Created\ by\ Michael\ Köhler\ on\ 22.12.16.}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ \ Copyright\ 2016\ Skie-\/Systems.\ All\ rights\ reserved.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ \ lib\ for\ OLED-\/Display\ with\ ssd1306/ssd1309/sh1106-\/Controller}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ \ first\ dev-\/version\ only\ for\ I2C-\/Connection}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ \ at\ ATMega328P\ like\ Arduino\ Uno}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ *\ \ at\ GRAPHICMODE\ lib\ needs\ SRAM\ for\ display}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ *\ \ DISPLAY-\/WIDTH\ *\ DISPLAY-\/HEIGHT\ +\ 2\ bytes}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#ifndef\ OLED\_H}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#define\ OLED\_H}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{00048\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \{}
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00050\ \ \ \ \ }
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#if\ (\_\_GNUC\_\_\ *\ 100\ +\ \_\_GNUC\_MINOR\_\_)\ <\ 303}}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#\ error\ "{}This\ library\ requires\ AVR-\/GCC\ 3.3\ or\ later,\ update\ to\ newer\ AVR-\/GCC\ compiler\ !"{}}}
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#include\ <inttypes.h>}}
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\#include\ <avr/pgmspace.h>}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{/*\ TODO:\ define\ bus\ */}}
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#define\ I2C\ \ }\textcolor{comment}{//\ I2C\ or\ SPI\ \ }}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{/*\ TODO:\ define\ displaycontroller\ */}}
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#define\ SH1106\ \ }\textcolor{comment}{//\ or\ SSD1306,\ check\ datasheet\ of\ your\ display}}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{comment}{/*\ TODO:\ define\ displaymode\ */}}
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#define\ GRAPHICMODE\ \ }\textcolor{comment}{//\ for\ text\ and\ graphic}}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{comment}{//\ TEXTMODE\ //\ for\ only\ text\ to\ display,}}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{comment}{/*\ TODO:\ define\ font\ */}}
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\#define\ FONT\ \ ssd1306oled\_font\ \ }\textcolor{comment}{//\ Refer\ font-\/name\ at\ font.h}}
+\DoxyCodeLine{00067\ \ \ \ \ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{comment}{//\ using\ 7-\/bit-\/adress\ for\ lcd-\/library}}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{//\ if\ you\ use\ your\ own\ library\ for\ twi\ check\ I2C-\/adress-\/handle}}
+\DoxyCodeLine{00070\ \textcolor{preprocessor}{\#define\ OLED\_I2C\_ADR\ (0x3c)\ \ }\textcolor{comment}{//\ 7\ bit\ slave-\/adress\ without\ r/w-\/bit}}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{comment}{//\ e.g.\ 8\ bit\ slave-\/adress:}}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{//\ 0x78\ =\ adress\ 0x3C\ with\ cleared\ r/w-\/bit\ (write-\/mode)}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\#ifdef\ I2C}}
+\DoxyCodeLine{00076\ \textcolor{comment}{//\ \#\ include\ "{}i2c.h"{}}}
+\DoxyCodeLine{00077\ \textcolor{preprocessor}{\#\ include\ "{}\mbox{\hyperlink{twi_8h}{twi.h}}"{}}}
+\DoxyCodeLine{00078\ \textcolor{preprocessor}{\#elif\ defined\ SPI}}
+\DoxyCodeLine{00079\ \textcolor{comment}{//\ If\ you\ want\ to\ use\ your\ other\ lib/function\ for\ SPI\ replace\ SPI-\/commands}}
+\DoxyCodeLine{00080\ \textcolor{preprocessor}{\#\ define\ OLED\_PORT\ PORTB}}
+\DoxyCodeLine{00081\ \textcolor{preprocessor}{\#\ define\ OLED\_DDR\ \ DDRB}}
+\DoxyCodeLine{00082\ \textcolor{preprocessor}{\#\ define\ RES\_PIN\ \ PB0}}
+\DoxyCodeLine{00083\ \textcolor{preprocessor}{\#\ define\ DC\_PIN\ \ \ PB1}}
+\DoxyCodeLine{00084\ \textcolor{preprocessor}{\#\ define\ CS\_PIN\ \ \ PB2}}
+\DoxyCodeLine{00085\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \textcolor{preprocessor}{\#ifndef\ YES}}
+\DoxyCodeLine{00088\ \textcolor{preprocessor}{\#\ define\ YES\ 1}}
+\DoxyCodeLine{00089\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \textcolor{preprocessor}{\#define\ NORMALSIZE\ 1}}
+\DoxyCodeLine{00092\ \textcolor{preprocessor}{\#define\ DOUBLESIZE\ 2}}
+\DoxyCodeLine{00093\ \ \ \ \ }
+\DoxyCodeLine{00094\ \textcolor{preprocessor}{\#define\ OLED\_DISP\_OFF\ 0xAE}}
+\DoxyCodeLine{00095\ \textcolor{preprocessor}{\#define\ OLED\_DISP\_ON\ 0xAF}}
+\DoxyCodeLine{00096\ \ \ \ \ }
+\DoxyCodeLine{00097\ \textcolor{preprocessor}{\#define\ WHITE\ 0x01}}
+\DoxyCodeLine{00098\ \textcolor{preprocessor}{\#define\ BLACK\ 0x00}}
+\DoxyCodeLine{00099\ \ \ \ \ }
+\DoxyCodeLine{00100\ \textcolor{preprocessor}{\#define\ DISPLAY\_WIDTH\ 128}}
+\DoxyCodeLine{00101\ \textcolor{preprocessor}{\#define\ DISPLAY\_HEIGHT\ 64}}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \textcolor{comment}{//\ Transmit\ command\ or\ data\ to\ display}}
+\DoxyCodeLine{00104\ \textcolor{keywordtype}{void}\ oled\_command(uint8\_t\ cmd[],\ uint8\_t\ size);}
+\DoxyCodeLine{00105\ \textcolor{keywordtype}{void}\ oled\_data(uint8\_t\ data[],\ uint16\_t\ size);}
+\DoxyCodeLine{00106\ \textcolor{keywordtype}{void}\ oled\_init(uint8\_t\ dispAttr);}
+\DoxyCodeLine{00107\ \textcolor{keywordtype}{void}\ oled\_home(\textcolor{keywordtype}{void});\ \ \textcolor{comment}{//\ set\ cursor\ to\ 0,0}}
+\DoxyCodeLine{00108\ \textcolor{keywordtype}{void}\ oled\_invert(uint8\_t\ invert);\ \ \textcolor{comment}{//\ invert\ display}}
+\DoxyCodeLine{00109\ \textcolor{keywordtype}{void}\ oled\_sleep(uint8\_t\ sleep);\ \ \ \ \textcolor{comment}{//\ display\ goto\ sleep\ (power\ off)}}
+\DoxyCodeLine{00110\ \textcolor{keywordtype}{void}\ oled\_set\_contrast(uint8\_t\ contrast);\ \ \ \ \textcolor{comment}{//\ set\ contrast\ for\ display}}
+\DoxyCodeLine{00111\ \textcolor{keywordtype}{void}\ oled\_puts(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ s);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ print\ string,\ \(\backslash\)n-\/terminated,\ from\ ram\ on\ screen\ (TEXTMODE)}}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ or\ buffer\ (GRAPHICMODE)}}
+\DoxyCodeLine{00113\ \textcolor{keywordtype}{void}\ oled\_puts\_p(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ progmem\_s);\ \ \textcolor{comment}{//\ print\ string\ from\ flash\ on\ screen\ (TEXTMODE)}}
+\DoxyCodeLine{00114\ \textcolor{comment}{//\ or\ buffer\ (GRAPHICMODE)}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \textcolor{keywordtype}{void}\ oled\_clrscr(\textcolor{keywordtype}{void});\ \ \textcolor{comment}{//\ clear\ screen\ (and\ buffer\ at\ GRFAICMODE)}}
+\DoxyCodeLine{00117\ \textcolor{keywordtype}{void}\ oled\_gotoxy(uint8\_t\ x,\ uint8\_t\ y);\ \ \textcolor{comment}{//\ set\ curser\ at\ pos\ x,\ y.\ x\ means\ character,}}
+\DoxyCodeLine{00118\ \textcolor{comment}{//\ y\ means\ line\ (page,\ refer\ lcd\ manual)}}
+\DoxyCodeLine{00119\ \textcolor{keywordtype}{void}\ oled\_goto\_xpix\_y(uint8\_t\ x,\ uint8\_t\ y);\ \textcolor{comment}{//\ set\ curser\ at\ pos\ x,\ y.\ x\ means\ pixel,}}
+\DoxyCodeLine{00120\ \textcolor{comment}{//\ y\ means\ line\ (page,\ refer\ lcd\ manual)}}
+\DoxyCodeLine{00121\ \textcolor{keywordtype}{void}\ oled\_putc(\textcolor{keywordtype}{char}\ c);\ \ \textcolor{comment}{//\ print\ character\ on\ screen\ at\ TEXTMODE}}
+\DoxyCodeLine{00122\ \textcolor{comment}{//\ at\ GRAPHICMODE\ print\ character\ to\ buffer}}
+\DoxyCodeLine{00123\ \textcolor{keywordtype}{void}\ oled\_charMode(uint8\_t\ mode);\ \ \textcolor{comment}{//\ set\ size\ of\ chars}}
+\DoxyCodeLine{00124\ \textcolor{keywordtype}{void}\ oled\_flip(uint8\_t\ flipping);\ \ \textcolor{comment}{//\ flip\ display,\ }}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ flipping\ ==\ 0:\ no\ flip\ (normal\ mode)\ }}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ ==\ 1:\ flip\ horizontal\ \&\ vertical}}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ ==\ 2:\ flip(mirrored)\ vertical}}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ ==\ 3:\ flip(mirrored)\ horizontal}}
+\DoxyCodeLine{00129\ \textcolor{preprocessor}{\#if\ defined\ GRAPHICMODE}}
+\DoxyCodeLine{00130\ \ \ \ \ uint8\_t\ oled\_drawPixel(uint8\_t\ x,\ uint8\_t\ y,\ uint8\_t\ color);}
+\DoxyCodeLine{00131\ \ \ \ \ uint8\_t\ oled\_drawLine(uint8\_t\ x1,\ uint8\_t\ y1,\ uint8\_t\ x2,\ uint8\_t\ y2,\ uint8\_t\ color);}
+\DoxyCodeLine{00132\ \ \ \ \ uint8\_t\ oled\_drawRect(uint8\_t\ px1,\ uint8\_t\ py1,\ uint8\_t\ px2,\ uint8\_t\ py2,\ uint8\_t\ color);}
+\DoxyCodeLine{00133\ \ \ \ \ uint8\_t\ oled\_fillRect(uint8\_t\ px1,\ uint8\_t\ py1,\ uint8\_t\ px2,\ uint8\_t\ py2,\ uint8\_t\ color);}
+\DoxyCodeLine{00134\ \ \ \ \ uint8\_t\ oled\_drawCircle(uint8\_t\ center\_x,\ uint8\_t\ center\_y,\ uint8\_t\ radius,\ uint8\_t\ color);}
+\DoxyCodeLine{00135\ \ \ \ \ uint8\_t\ oled\_fillCircle(uint8\_t\ center\_x,\ uint8\_t\ center\_y,\ uint8\_t\ radius,\ uint8\_t\ color);}
+\DoxyCodeLine{00136\ \ \ \ \ uint8\_t\ oled\_drawBitmap(uint8\_t\ x,\ uint8\_t\ y,\ \textcolor{keyword}{const}\ uint8\_t\ picture[],\ uint8\_t\ width,\ uint8\_t\ height,\ uint8\_t\ color);}
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keywordtype}{void}\ oled\_display(\textcolor{keywordtype}{void});\ \ \ \ \ \ \ \textcolor{comment}{//\ copy\ buffer\ to\ display\ RAM}}
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keywordtype}{void}\ oled\_clear\_buffer(\textcolor{keywordtype}{void});\ \ \textcolor{comment}{//\ clear\ display\ buffer}}
+\DoxyCodeLine{00139\ \ \ \ \ uint8\_t\ oled\_check\_buffer(uint8\_t\ x,\ uint8\_t\ y);\ \textcolor{comment}{//\ read\ a\ pixel\ value\ from\ the\ display\ buffer}}
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keywordtype}{void}\ oled\_display\_block(uint8\_t\ x,\ uint8\_t\ line,\ uint8\_t\ width);\ \textcolor{comment}{//\ display\ (part\ of)\ a\ display\ line}}
+\DoxyCodeLine{00141\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{00144\ \}}
+\DoxyCodeLine{00145\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ \ OLED\_H\ \ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

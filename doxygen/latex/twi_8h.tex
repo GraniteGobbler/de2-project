@@ -1,0 +1,51 @@
+\doxysection{lib/twi/twi.h File Reference}
+\hypertarget{twi_8h}{}\label{twi_8h}\index{lib/twi/twi.h@{lib/twi/twi.h}}
+{\ttfamily \#include $<$avr/io.\+h$>$}\newline
+\doxysubsubsection*{Macros}
+\begin{Indent}\textbf{ Definition of frequencies}\par
+\begin{DoxyCompactItemize}
+\item 
+\#define {\bfseries F\+\_\+\+CPU}~16000000
+\begin{DoxyCompactList}\small\item\em CPU frequency in Hz required TWI\+\_\+\+BIT\+\_\+\+RATE\+\_\+\+REG. \end{DoxyCompactList}\item 
+\#define {\bfseries F\+\_\+\+SCL}~100000
+\begin{DoxyCompactList}\small\item\em I2\+C/\+TWI bit rate. Must be greater than 31000. \end{DoxyCompactList}\item 
+\#define {\bfseries TWI\+\_\+\+BIT\+\_\+\+RATE\+\_\+\+REG}~((\mbox{\hyperlink{group__fryza__twi_ga43bafb28b29491ec7f871319b5a3b2f8}{F\+\_\+\+CPU}}/\mbox{\hyperlink{group__fryza__twi_ga7a1c522bed64982971384489ee477bd3}{F\+\_\+\+SCL}} -\/ 16) / 2)
+\begin{DoxyCompactList}\small\item\em TWI bit rate register value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Definition of ports and pins}\par
+\begin{DoxyCompactItemize}
+\item 
+\#define {\bfseries TWI\+\_\+\+PORT}~PORTC
+\begin{DoxyCompactList}\small\item\em Port of TWI unit. \end{DoxyCompactList}\item 
+\#define {\bfseries TWI\+\_\+\+SDA\+\_\+\+PIN}~4
+\begin{DoxyCompactList}\small\item\em SDA pin of TWI unit. \end{DoxyCompactList}\item 
+\#define {\bfseries TWI\+\_\+\+SCL\+\_\+\+PIN}~5
+\begin{DoxyCompactList}\small\item\em SCL pin of TWI unit. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\doxysubsubsection*{Other definitions}
+\begin{DoxyCompactItemize}
+\item 
+\#define {\bfseries TWI\+\_\+\+WRITE}~0
+\begin{DoxyCompactList}\small\item\em Mode for writing to I2\+C/\+TWI device. \end{DoxyCompactList}\item 
+\#define {\bfseries TWI\+\_\+\+READ}~1
+\begin{DoxyCompactList}\small\item\em Mode for reading from I2\+C/\+TWI device. \end{DoxyCompactList}\item 
+\#define {\bfseries TWI\+\_\+\+ACK}~0
+\begin{DoxyCompactList}\small\item\em ACK value for writing to I2\+C/\+TWI bus. \end{DoxyCompactList}\item 
+\#define {\bfseries TWI\+\_\+\+NACK}~1
+\begin{DoxyCompactList}\small\item\em NACK value for writing to I2\+C/\+TWI bus. \end{DoxyCompactList}\item 
+\#define {\bfseries DDR}(\+\_\+x)~(\texorpdfstring{$\ast$}{*}(\&\+\_\+x -\/ 1))
+\begin{DoxyCompactList}\small\item\em Address of Data Direction Register of port \+\_\+x. \end{DoxyCompactList}\item 
+\#define {\bfseries PIN}(\+\_\+x)~(\texorpdfstring{$\ast$}{*}(\&\+\_\+x -\/ 2))
+\begin{DoxyCompactList}\small\item\em Address of input register of port \+\_\+x. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__fryza__twi_ga16f0e6b2fa5a26eadbf4086ab6d54467}{twi\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em Initialize TWI unit, enable internal pull-\/ups, and set SCL frequency. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__fryza__twi_gaf37269da7f6b1b22438b78d2f965f274}{twi\+\_\+start}} (void)
+\begin{DoxyCompactList}\small\item\em Start communication on I2\+C/\+TWI bus. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{group__fryza__twi_ga129b8a79f75189c3801cb7082e6b8340}{twi\+\_\+write}} (uint8\+\_\+t data)
+\begin{DoxyCompactList}\small\item\em Send one byte to I2\+C/\+TWI Slave device. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{group__fryza__twi_gae9f84b771b4acdedd2106e91cb03cc78}{twi\+\_\+read}} (uint8\+\_\+t ack)
+\begin{DoxyCompactList}\small\item\em Read one byte from I2\+C/\+TWI Slave device and acknowledge it by ACK or NACK. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__fryza__twi_gacf52d6c93df110dee6d402b389e5042e}{twi\+\_\+stop}} (void)
+\begin{DoxyCompactList}\small\item\em Generates Stop condition on I2\+C/\+TWI bus. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{group__fryza__twi_ga4f677656a04639fb33a080f0fa7a1011}{twi\+\_\+test\+\_\+address}} (uint8\+\_\+t adr)
+\begin{DoxyCompactList}\small\item\em Test presence of one I2C device on the bus. \end{DoxyCompactList}\end{DoxyCompactItemize}

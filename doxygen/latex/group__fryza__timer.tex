@@ -1,0 +1,126 @@
+\doxysection{Timer Library \texorpdfstring{$<$}{<}timer.\+h\texorpdfstring{$>$}{>}}
+\hypertarget{group__fryza__timer}{}\label{group__fryza__timer}\index{Timer Library $<$timer.h$>$@{Timer Library $<$timer.h$>$}}
+
+
+Timer library for AVR-\/\+GCC.  
+
+
+\doxysubsubsection*{Definitions for 16-\/bit Timer/\+Counter1}
+\begin{DoxyNote}{Note}
+t\+\_\+\+OVF = 1/\+F\+\_\+\+CPU \texorpdfstring{$\ast$}{*} prescaler \texorpdfstring{$\ast$}{*} 2\texorpdfstring{$^\wedge$}{\string^}n where n = 16, F\+\_\+\+CPU = 16 MHz 
+\end{DoxyNote}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{group__fryza__timer_gaa58486e0d2c5da0fbfac5f52295a7305}\label{group__fryza__timer_gaa58486e0d2c5da0fbfac5f52295a7305} 
+\#define {\bfseries TIM1\+\_\+\+STOP}~TCCR1B \&= \texorpdfstring{$\sim$}{\string~}((1$<$$<$CS12) \texorpdfstring{$\vert$}{|} (1$<$$<$CS11) \texorpdfstring{$\vert$}{|} (1$<$$<$CS10));
+\begin{DoxyCompactList}\small\item\em Stop timer, prescaler 000 -\/-\/\texorpdfstring{$>$}{>} STOP. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_ga9b6166213b3ce3b8fc04fe28f4bf3559}\label{group__fryza__timer_ga9b6166213b3ce3b8fc04fe28f4bf3559} 
+\#define {\bfseries TIM1\+\_\+\+OVF\+\_\+4\+MS}~TCCR1B \&= \texorpdfstring{$\sim$}{\string~}((1$<$$<$CS12) \texorpdfstring{$\vert$}{|} (1$<$$<$CS11)); TCCR1B \texorpdfstring{$\vert$}{|}= (1$<$$<$CS10);
+\begin{DoxyCompactList}\small\item\em Set overflow 4ms, prescaler 001 -\/-\/\texorpdfstring{$>$}{>} 1. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_gac796ccb27905d044d2b95cc121e87f13}\label{group__fryza__timer_gac796ccb27905d044d2b95cc121e87f13} 
+\#define {\bfseries TIM1\+\_\+\+OVF\+\_\+33\+MS}~TCCR1B \&= \texorpdfstring{$\sim$}{\string~}((1$<$$<$CS12) \texorpdfstring{$\vert$}{|} (1$<$$<$CS10)); TCCR1B \texorpdfstring{$\vert$}{|}= (1$<$$<$CS11);
+\begin{DoxyCompactList}\small\item\em Set overflow 33ms, prescaler 010 -\/-\/\texorpdfstring{$>$}{>} 8. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_gabb5f3762782ef17052d996caedbe1edd}\label{group__fryza__timer_gabb5f3762782ef17052d996caedbe1edd} 
+\#define {\bfseries TIM1\+\_\+\+OVF\+\_\+262\+MS}~TCCR1B \&= \texorpdfstring{$\sim$}{\string~}(1$<$$<$CS12); TCCR1B \texorpdfstring{$\vert$}{|}= (1$<$$<$CS11) \texorpdfstring{$\vert$}{|} (1$<$$<$CS10);
+\begin{DoxyCompactList}\small\item\em Set overflow 262ms, prescaler 011 -\/-\/\texorpdfstring{$>$}{>} 64. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_gae04dcd33527ebd1238430cd5fb101588}\label{group__fryza__timer_gae04dcd33527ebd1238430cd5fb101588} 
+\#define {\bfseries TIM1\+\_\+\+OVF\+\_\+1\+SEC}~TCCR1B \&= \texorpdfstring{$\sim$}{\string~}((1$<$$<$CS11) \texorpdfstring{$\vert$}{|} (1$<$$<$CS10)); TCCR1B \texorpdfstring{$\vert$}{|}= (1$<$$<$CS12);
+\begin{DoxyCompactList}\small\item\em Set overflow 1s, prescaler 100 -\/-\/\texorpdfstring{$>$}{>} 256. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_ga946e283dfd86f7068b1560f078c177d7}\label{group__fryza__timer_ga946e283dfd86f7068b1560f078c177d7} 
+\#define {\bfseries TIM1\+\_\+\+OVF\+\_\+4\+SEC}~TCCR1B \&= \texorpdfstring{$\sim$}{\string~}(1$<$$<$CS11); TCCR1B \texorpdfstring{$\vert$}{|}= (1$<$$<$CS12) \texorpdfstring{$\vert$}{|} (1$<$$<$CS10);
+\begin{DoxyCompactList}\small\item\em Set overflow 4s, prescaler // 101 -\/-\/\texorpdfstring{$>$}{>} 1024. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_ga8332fab14976bc370e90566b56b4b7c1}\label{group__fryza__timer_ga8332fab14976bc370e90566b56b4b7c1} 
+\#define {\bfseries TIM1\+\_\+\+OVF\+\_\+\+ENABLE}~TIMSK1 \texorpdfstring{$\vert$}{|}= (1$<$$<$TOIE1);
+\begin{DoxyCompactList}\small\item\em Enable overflow interrupt, 1 -\/-\/\texorpdfstring{$>$}{>} enable. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_ga3bd58d8322cf367fb4119cd4d363a707}\label{group__fryza__timer_ga3bd58d8322cf367fb4119cd4d363a707} 
+\#define {\bfseries TIM1\+\_\+\+OVF\+\_\+\+DISABLE}~TIMSK1 \&= \texorpdfstring{$\sim$}{\string~}(1$<$$<$TOIE1);
+\begin{DoxyCompactList}\small\item\em Disable overflow interrupt, 0 -\/-\/\texorpdfstring{$>$}{>} disable. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Definitions for 8-\/bit Timer/\+Counter0}
+\begin{DoxyNote}{Note}
+t\+\_\+\+OVF = 1/\+F\+\_\+\+CPU \texorpdfstring{$\ast$}{*} prescaler \texorpdfstring{$\ast$}{*} 2\texorpdfstring{$^\wedge$}{\string^}n where n = 8, F\+\_\+\+CPU = 16 MHz 
+\end{DoxyNote}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{group__fryza__timer_gaf2609366d692f1b8719c7f4402e5340b}\label{group__fryza__timer_gaf2609366d692f1b8719c7f4402e5340b} 
+\#define {\bfseries TIM0\+\_\+\+STOP}~TCCR0B  \&= \texorpdfstring{$\sim$}{\string~}((1$<$$<$CS02) \texorpdfstring{$\vert$}{|} (1$<$$<$CS01) \texorpdfstring{$\vert$}{|} (1$<$$<$CS00));
+\begin{DoxyCompactList}\small\item\em Stop timer, prescaler 000 -\/-\/\texorpdfstring{$>$}{>} STOP. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_gac4f95b4f704be11fdf07ffaf63547e29}\label{group__fryza__timer_gac4f95b4f704be11fdf07ffaf63547e29} 
+\#define {\bfseries TIM0\+\_\+\+OVF\+\_\+16\+US}~TCCR0B  \&= \texorpdfstring{$\sim$}{\string~}((1$<$$<$CS02) \texorpdfstring{$\vert$}{|} (1$<$$<$CS01)); TCCR0B  \texorpdfstring{$\vert$}{|}= (1$<$$<$CS00);
+\begin{DoxyCompactList}\small\item\em Set overflow 16us, prescaler 001 -\/-\/\texorpdfstring{$>$}{>} 1. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_gafcb0b873eaa46ac36a82c62418b7ccec}\label{group__fryza__timer_gafcb0b873eaa46ac36a82c62418b7ccec} 
+\#define {\bfseries TIM0\+\_\+\+OVF\+\_\+128\+US}~TCCR0B  \&= \texorpdfstring{$\sim$}{\string~}((1$<$$<$CS02) \texorpdfstring{$\vert$}{|} (1$<$$<$CS00)); TCCR0B  \texorpdfstring{$\vert$}{|}= (1$<$$<$CS01);
+\begin{DoxyCompactList}\small\item\em Set overflow 128us, prescaler 010 -\/-\/\texorpdfstring{$>$}{>} 8. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_ga3048eff34ec1dc629c5ba57bf2806247}\label{group__fryza__timer_ga3048eff34ec1dc629c5ba57bf2806247} 
+\#define {\bfseries TIM0\+\_\+\+OVF\+\_\+1\+MS}~TCCR0B  \&= \texorpdfstring{$\sim$}{\string~}(1$<$$<$CS02); TCCR0B  \texorpdfstring{$\vert$}{|}= (1$<$$<$CS01) \texorpdfstring{$\vert$}{|} (1$<$$<$CS00);
+\begin{DoxyCompactList}\small\item\em Set overflow 1ms, prescaler 011 -\/-\/\texorpdfstring{$>$}{>} 64. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_ga984cce634a16be56128aa91c55c98d25}\label{group__fryza__timer_ga984cce634a16be56128aa91c55c98d25} 
+\#define {\bfseries TIM0\+\_\+\+OVF\+\_\+4\+MS}~TCCR0B  \&= \texorpdfstring{$\sim$}{\string~}((1$<$$<$CS01) \texorpdfstring{$\vert$}{|} (1$<$$<$CS00)); TCCR0B  \texorpdfstring{$\vert$}{|}= (1$<$$<$CS02);
+\begin{DoxyCompactList}\small\item\em Set overflow 4ms, prescaler 100 -\/-\/\texorpdfstring{$>$}{>} 256. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_ga29549fd61ccdd9b308bf5a4ee88ccf44}\label{group__fryza__timer_ga29549fd61ccdd9b308bf5a4ee88ccf44} 
+\#define {\bfseries TIM0\+\_\+\+OVF\+\_\+16\+MS}~TCCR0B  \&= \texorpdfstring{$\sim$}{\string~}(1$<$$<$CS01); TCCR0B  \texorpdfstring{$\vert$}{|}= (1$<$$<$CS02) \texorpdfstring{$\vert$}{|} (1$<$$<$CS00);
+\begin{DoxyCompactList}\small\item\em Set overflow 16ms, prescaler // 101 -\/-\/\texorpdfstring{$>$}{>} 1024. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_ga1e0e9e9fd5b95afe0e1ffa8b22e20364}\label{group__fryza__timer_ga1e0e9e9fd5b95afe0e1ffa8b22e20364} 
+\#define {\bfseries TIM0\+\_\+\+OVF\+\_\+\+ENABLE}~TIMSK0 \texorpdfstring{$\vert$}{|}= (1$<$$<$TOIE0);
+\begin{DoxyCompactList}\small\item\em Enable overflow interrupt, 1 -\/-\/\texorpdfstring{$>$}{>} enable. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_ga2a33fed5ff8295df206808c3e7f13f8d}\label{group__fryza__timer_ga2a33fed5ff8295df206808c3e7f13f8d} 
+\#define {\bfseries TIM0\+\_\+\+OVF\+\_\+\+DISABLE}~TIMSK0 \&= \texorpdfstring{$\sim$}{\string~}(1$<$$<$TOIE0);
+\begin{DoxyCompactList}\small\item\em Disable overflow interrupt, 0 -\/-\/\texorpdfstring{$>$}{>} disable. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Definitions for 8-\/bit Timer/\+Counter2}
+\begin{DoxyNote}{Note}
+t\+\_\+\+OVF = 1/\+F\+\_\+\+CPU \texorpdfstring{$\ast$}{*} prescaler \texorpdfstring{$\ast$}{*} 2\texorpdfstring{$^\wedge$}{\string^}n where n = 8, F\+\_\+\+CPU = 16 MHz 
+\end{DoxyNote}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{group__fryza__timer_gabec36e3c8add0dcd9f3a11d1eae0b812}\label{group__fryza__timer_gabec36e3c8add0dcd9f3a11d1eae0b812} 
+\#define {\bfseries TIM2\+\_\+\+STOP}~TCCR2B  \&= \texorpdfstring{$\sim$}{\string~}((1$<$$<$CS22) \texorpdfstring{$\vert$}{|} (1$<$$<$CS21) \texorpdfstring{$\vert$}{|} (1$<$$<$CS20));
+\begin{DoxyCompactList}\small\item\em Stop timer, prescaler 000 -\/-\/\texorpdfstring{$>$}{>} STOP. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_gabc80a573e99dd1f74f791340568bf3fa}\label{group__fryza__timer_gabc80a573e99dd1f74f791340568bf3fa} 
+\#define {\bfseries TIM2\+\_\+\+OVF\+\_\+16\+US}~TCCR2B  \&= \texorpdfstring{$\sim$}{\string~}((1$<$$<$CS22) \texorpdfstring{$\vert$}{|} (1$<$$<$CS21)); TCCR2B  \texorpdfstring{$\vert$}{|}= (1$<$$<$CS20);
+\begin{DoxyCompactList}\small\item\em Set overflow 16us, prescaler 001 -\/-\/\texorpdfstring{$>$}{>} 1. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_gad13f29bf6fad7d708fe3cc9e1d757492}\label{group__fryza__timer_gad13f29bf6fad7d708fe3cc9e1d757492} 
+\#define {\bfseries TIM2\+\_\+\+OVF\+\_\+128\+US}~TCCR2B  \&= \texorpdfstring{$\sim$}{\string~}((1$<$$<$CS22) \texorpdfstring{$\vert$}{|} (1$<$$<$CS20)); TCCR2B  \texorpdfstring{$\vert$}{|}= (1$<$$<$CS21);
+\begin{DoxyCompactList}\small\item\em Set overflow 128us, prescaler 010 -\/-\/\texorpdfstring{$>$}{>} 8. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_ga0578d529d0a9ef188f2089fa89ce3668}\label{group__fryza__timer_ga0578d529d0a9ef188f2089fa89ce3668} 
+\#define {\bfseries TIM2\+\_\+\+OVF\+\_\+512\+US}~TCCR2B  \&= \texorpdfstring{$\sim$}{\string~}((1$<$$<$CS22)); TCCR2B  \texorpdfstring{$\vert$}{|}= (1$<$$<$CS21) \texorpdfstring{$\vert$}{|} (1$<$$<$CS20);
+\begin{DoxyCompactList}\small\item\em Set overflow 512us, prescaler 011 -\/-\/\texorpdfstring{$>$}{>} 32. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_gad7e5fe8c9b878b94a4f2facd05be5db6}\label{group__fryza__timer_gad7e5fe8c9b878b94a4f2facd05be5db6} 
+\#define {\bfseries TIM2\+\_\+\+OVF\+\_\+1\+MS}~TCCR2B  \&= \texorpdfstring{$\sim$}{\string~}((1$<$$<$CS21) \texorpdfstring{$\vert$}{|} (1$<$$<$CS20)); TCCR2B  \texorpdfstring{$\vert$}{|}= (1$<$$<$CS22);
+\begin{DoxyCompactList}\small\item\em Set overflow 1ms, prescaler 100 -\/-\/\texorpdfstring{$>$}{>} 64. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_ga9a3a58260d0fcf8170be08f2e68da52a}\label{group__fryza__timer_ga9a3a58260d0fcf8170be08f2e68da52a} 
+\#define {\bfseries TIM2\+\_\+\+OVF\+\_\+2\+MS}~TCCR2B  \&= \texorpdfstring{$\sim$}{\string~}((1$<$$<$CS21)); TCCR2B  \texorpdfstring{$\vert$}{|}= (1$<$$<$CS22) \texorpdfstring{$\vert$}{|} (1$<$$<$CS20);
+\begin{DoxyCompactList}\small\item\em Set overflow 2ms, prescaler 101 -\/-\/\texorpdfstring{$>$}{>} 128. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_ga8574eb85de0c960dab446f601d8fde38}\label{group__fryza__timer_ga8574eb85de0c960dab446f601d8fde38} 
+\#define {\bfseries TIM2\+\_\+\+OVF\+\_\+4\+MS}~TCCR2B  \&= \texorpdfstring{$\sim$}{\string~}((1$<$$<$CS20)); TCCR2B  \texorpdfstring{$\vert$}{|}= (1$<$$<$CS22) \texorpdfstring{$\vert$}{|} (1$<$$<$CS21);
+\begin{DoxyCompactList}\small\item\em Set overflow 4ms, prescaler 110 -\/-\/\texorpdfstring{$>$}{>} 256. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_gace1218b5a54173f3fe41b6ef51673078}\label{group__fryza__timer_gace1218b5a54173f3fe41b6ef51673078} 
+\#define {\bfseries TIM2\+\_\+\+OVF\+\_\+16\+MS}~TCCR2B  \texorpdfstring{$\vert$}{|}= (1$<$$<$CS22) \texorpdfstring{$\vert$}{|} (1$<$$<$CS21) \texorpdfstring{$\vert$}{|} (1$<$$<$CS20);
+\begin{DoxyCompactList}\small\item\em Set overflow 16ms, prescaler // 111 -\/-\/\texorpdfstring{$>$}{>} 1024. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_gaf9846164eb891b40360a818e8aa54db6}\label{group__fryza__timer_gaf9846164eb891b40360a818e8aa54db6} 
+\#define {\bfseries TIM2\+\_\+\+OVF\+\_\+\+ENABLE}~TIMSK2 \texorpdfstring{$\vert$}{|}= (1$<$$<$TOIE2);
+\begin{DoxyCompactList}\small\item\em Enable overflow interrupt, 1 -\/-\/\texorpdfstring{$>$}{>} enable. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__timer_gac101fd92c875ae4b3e49cc71d4c81ba9}\label{group__fryza__timer_gac101fd92c875ae4b3e49cc71d4c81ba9} 
+\#define {\bfseries TIM2\+\_\+\+OVF\+\_\+\+DISABLE}~TIMSK2 \&= \texorpdfstring{$\sim$}{\string~}(1$<$$<$TOIE2);
+\begin{DoxyCompactList}\small\item\em Disable overflow interrupt, 0 -\/-\/\texorpdfstring{$>$}{>} disable. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Timer library for AVR-\/\+GCC. 
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{timer_8h}{timer.h}}>}\ }
+
+\end{DoxyCode}
+
+
+The library contains macros for controlling the timer modules.
+
+\begin{DoxyNote}{Note}
+Based on Microchip Atmel ATmega328P manual and no source file is needed for the library. 
+\end{DoxyNote}
+\begin{DoxyAuthor}{Author}
+Tomas Fryza, Dept. of Radio Electronics, Brno University of Technology, Czechia 
+\end{DoxyAuthor}
+\begin{DoxyCopyright}{Copyright}
+(c) 2019 Tomas Fryza, This work is licensed under the terms of the MIT license 
+\end{DoxyCopyright}
