@@ -1,14 +1,4 @@
-
-#include <avr/io.h>        // AVR device-specific IO definitions
-#include <avr/interrupt.h> // Interrupts standard C library for AVR-GCC
-#include <stdio.h> // C library for IO operations
-#include <math.h>  // C library for math operations
-#include <gpio.h>  //
-#include <uart.h>  // Peter Fleury's UART library
-#include <oled.h> 
 #include "batterymeter.h"
-
-
 
 // Funcs
 void batterymeter_init()

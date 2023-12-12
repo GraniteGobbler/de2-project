@@ -22,46 +22,11 @@
  * Returns:  none
  **********************************************************************/
 
-// #ifndef F_CPU
-// #define F_CPU 16000000 // CPU frequency in Hz required for UART_BAUD_SELECT
-
-// #endif
-
-// Global vars
-// volatile float ADC_A0;          // Analog pin A0 voltage
-// volatile uint16_t TIM1_OVF_CNT; // Timer1 overflow counter
-
-
 int main(void)
 {
     batterymeter_init();
 
     batterymeter_change_scr(1);
-
-    //// Vars in while loop ////
-    // uint8_t isStarted = 0;
-    // uint16_t Current_Time = 0;
-
-    // float Voltage = 0.0;
-    // float Voltage_unloaded = 0.0;
-    // float Voltage_dropped = 0.0;
-
-    // float Current = 0.0;
-
-    // float Capacity = 0.0;           //  [mAh]
-    // float Capacity_increment = 0.0; //  [mAs]
-
-    // float Energy = 0.0;           // [mWh]
-    // float Energy_increment = 0.0; //  [mWs]
-
-    // float R_circ = 1.11265; // Total circuit resistance
-    // float R_bat = 0.0;      // Internal resistance of battery
-
-    // char cVolt[8];
-    // char cCurr[8];
-    // char cIR[8];
-    // char cCap[8];
-    // char cEne[8];
 
     // Infinite loop
     while (1)
@@ -75,12 +40,6 @@ int main(void)
             Voltage_unloaded = ADC_A0; // Snapshot of unloaded voltage of battery
             
             batterymeter_uart_puts(Voltage_unloaded, "Unloaded Voltage: %.3f V");
-            
-            // sprintf(cVolt, "%.3f", Voltage_unloaded);
-
-            // uart_puts("Unloaded Voltage: ");
-            // uart_puts(cVolt);
-            // uart_puts("\r\n");
 
             GPIO_write_low(&PORTB, Base_ON);
             TIM1_OVF_CNT = 0; // Reset timer overflow counter
@@ -100,33 +59,21 @@ int main(void)
 
         if (isStarted == 0)
         {
-            // sprintf(cVolt, "Batt voltage: %.3f V", ADC_A0);
-            // oled_gotoxy(0, 3);
-            // oled_puts(cVolt);
-            
             batterymeter_write_var(0, 3, ADC_A0, "Batt voltage: %.3f V");
 
             if (ADC_A0 <= 2.6)
             {
-                // oled_gotoxy(0, 7);  oled_puts("                     ");
-                // oled_gotoxy(1, 7);  oled_puts("Voltage is too low!");
-                
                 batterymeter_clear_line(7);
                 batterymeter_write_line(1,7,"Voltage is too low!");
 
             }
             else if (ADC_A0 >= 4.1)
             {
-                // oled_gotoxy(0, 7);  oled_puts("BATT is 100% charged!");
-
                 batterymeter_clear_line(7);
                 batterymeter_write_line(0,7,"BATT is 100% charged!");
             }
             else
             {
-                // oled_gotoxy(0, 7);  oled_puts("                     ");
-                // oled_gotoxy(6, 7);  oled_puts("Battery OK!");
-                
                 batterymeter_clear_line(7);
                 batterymeter_write_line(6,7,"Battery OK!");
             }
@@ -160,10 +107,6 @@ int main(void)
                 if (Voltage <= 2.5)
                 {
                     uart_puts("Measurement finished!\r\n");
-
-                    // isStarted = 0;
-                    // oled_clrscr();
-                    // GPIO_write_high(&PORTB, Base_ON);
                     
                     batterymeter_stop_measure(&isStarted);
 
@@ -174,13 +117,6 @@ int main(void)
                         batterymeter_write_var(10,3,R_bat*1000,"%.3f");
                         batterymeter_write_var(10,4,Capacity,"%.1f");
                         batterymeter_write_var(10,5,Energy,"%.1f");
-
-                        // oled_gotoxy(10, 3);
-                        // oled_puts(cIR);
-                        // oled_gotoxy(10, 4);
-                        // oled_puts(cCap);
-                        // oled_gotoxy(10, 5);
-                        // oled_puts(cEne);
 
                         oled_display();
 
@@ -198,111 +134,27 @@ int main(void)
                     Capacity = 0.0;
                     Energy = 0.0;
                     continue;
-
-                    // while ((GPIO_read(&PIND, Stop_button) == 1) & (Capacity != 0.0))
-                    // {
-                        // oled_charMode(DOUBLESIZE);
-                        // oled_gotoxy(1, 0);
-                        // oled_puts("Finished!");
-                        // oled_drawLine(0, 15, 128, 15, WHITE);
-
-                        // oled_charMode(NORMALSIZE);
-                        // oled_gotoxy(0, 3);
-                        // oled_puts("IR:       _.___  mOhm");
-                        // oled_gotoxy(0, 4);
-                        // oled_puts("Capacity: _._     mAh");
-                        // oled_gotoxy(0, 5);
-                        // oled_puts("Energy:   _._     mWh");
-                        // oled_gotoxy(0, 7);
-                        // oled_puts("Press RED to return!");
-
-                        // oled_gotoxy(10, 3);
-                        // oled_puts(cIR);
-                        // oled_gotoxy(10, 4);
-                        // oled_puts(cCap);
-                        // oled_gotoxy(10, 5);
-                        // oled_puts(cEne);
-
-                        // oled_display();
-                    // }
-
-                    // oled_clrscr();
-
-                    // oled_charMode(DOUBLESIZE);
-                    // oled_puts("BATT Meter");
-                    // oled_drawLine(0, 15, 128, 15, WHITE);
-
-                    // oled_charMode(NORMALSIZE);
-                    // oled_gotoxy(0, 5);
-                    // oled_puts("Press GREEN to start!");
-                    // oled_gotoxy(1, 6);
-                    // oled_puts("Press RED to pause!");
-
-                    // oled_display();
-
-                    // R_bat = 0.0;
-                    // Capacity = 0.0;
-                    // Energy = 0.0;
-                    // continue;
                 }
 
                 // Displaying logic, minus sign position correction //
                 if (floor(Voltage) == 0.0) // Is 0 V?
-                {
-                    // oled_gotoxy(9, 2);
-                    // oled_putc(' '); // Don't print '-' sign
-                    // oled_gotoxy(9, 3);
-                    // oled_putc(' ');
-                    
+                {        
                     // Don't print '-' sign
                     batterymeter_write_line(9,2," ");
                     batterymeter_write_line(9,3," ");
                 }
                 else if ((Voltage * -1) == fabs(Voltage)) // Is negative?
                 {
-                    // oled_gotoxy(9, 2);
-                    // oled_putc('-'); // Print '-' sign on a specific place
-                    // oled_gotoxy(9, 3);
-                    // oled_putc('-');
-
                     // Print '-' sign on a specific place
                     batterymeter_write_line(9,2,"-");
                     batterymeter_write_line(9,3,"-");
                 }
                 else // Is positive?
                 {
-                    // oled_gotoxy(9, 2);
-                    // oled_putc(' '); // Clear '-' sign
-                    // oled_gotoxy(9, 3);
-                    // oled_putc(' ');
-
                     // Clear '-' sign
                     batterymeter_write_line(9,2," ");
                     batterymeter_write_line(9,3," ");
                 }
-
-                // sprintf(cIR, "%.3f", R_bat * 1000); // internal resistance print is in mOhm
-                // sprintf(cVolt, "%.3f", fabs(Voltage));
-                // sprintf(cCurr, "%.3f", fabs(Current));
-                // sprintf(cCap, "%.1f", Capacity);
-                // sprintf(cEne, "%.1f", Energy);
-
-                // oled_gotoxy(10, 0);
-                // oled_puts(cIR);
-                // oled_gotoxy(10, 2);
-                // oled_puts(cVolt);
-                // oled_gotoxy(10, 3);
-                // oled_puts(cCurr);
-                // oled_gotoxy(10, 4);
-                // oled_puts(cCap);
-                // oled_gotoxy(10, 5);
-                // oled_puts(cEne);
-
-                // uart_puts("IR: ");      uart_puts(cIR);     uart_puts(" mOhm\r\n");
-                // uart_puts("Voltage: "); uart_puts(cVolt);   uart_puts(" V\r\n");
-                // uart_puts("Current: "); uart_puts(cCurr);   uart_puts(" A\r\n");
-                // uart_puts("Capacity: ");uart_puts(cCap);    uart_puts(" mAh\r\n");
-                // uart_puts("Energy: ");  uart_puts(cEne);    uart_puts(" mWh\r\n");
 
                 batterymeter_write_var(10,0,R_bat * 1000,"%.3f");
                 batterymeter_write_var(10,2,fabs(Voltage),"%.3f");
