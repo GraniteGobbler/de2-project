@@ -14,14 +14,6 @@
 /* Includes ----------------------------------------------------------*/
 #include <batterymeter.h>
 
-/* Function definitions ----------------------------------------------*/
-/**********************************************************************
- * Function: Main function where the program execution begins
- * Purpose:  Use Timer/Counter1 and start ADC conversion every 100 ms.
- *           When AD conversion ends, send converted value to LCD screen.
- * Returns:  none
- **********************************************************************/
-
 int main(void)
 {
     batterymeter_init();
