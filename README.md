@@ -117,7 +117,7 @@ Energy_increment = Capacity_increment * Voltage; // [mWs]
 Energy = Energy + (Energy_increment / 3600);     // [mWh]
 ```
 
-During the measurement the electrical quantities are shown on the display and updated every second. The `oled_puts();` function is required in order to write a string into the OLED RAM. We write a lot into that RAM and usually specify the exact spot on the display. For that we have devised a simple function that accepts values of variables. It also sends that string via UART for debugging purposes.
+During the measurement the electrical quantities are shown on the display and updated every second. The `oled_puts();` function is required in order to write a string into the OLED RAM. We write a lot into that RAM and usually specify the exact spot on the display. For that we have devised a simple function that accepts values of variables. It also sends that string via UART for debugging purposes. Other functions are listed in the `batterymeter.h` [library documentation](https://granitegobbler.github.io/de2-project/).
 
 ``` c
 void batterymeter_write_var(unsigned int x, unsigned int y, float value, char* string)
