@@ -28,8 +28,8 @@
 // #endif
 
 // Global vars
-volatile float ADC_A0;          // Analog pin A0 voltage
-volatile uint16_t TIM1_OVF_CNT; // Timer1 overflow counter
+// volatile float ADC_A0;          // Analog pin A0 voltage
+// volatile uint16_t TIM1_OVF_CNT; // Timer1 overflow counter
 
 
 int main(void)
@@ -39,25 +39,23 @@ int main(void)
     batterymeter_change_scr(1);
 
     //// Vars in while loop ////
-    uint8_t isStarted = 0;
-    // uint8_t isFinished = 0;
-    uint16_t Current_Time = 0;
+    // uint8_t isStarted = 0;
+    // uint16_t Current_Time = 0;
 
-    // float ADC_A0_old = 0.0;
-    float Voltage = 0.0;
-    float Voltage_unloaded = 0.0;
-    float Voltage_dropped = 0.0;
+    // float Voltage = 0.0;
+    // float Voltage_unloaded = 0.0;
+    // float Voltage_dropped = 0.0;
 
-    float Current = 0.0;
+    // float Current = 0.0;
 
-    float Capacity = 0.0;           //  [mAh]
-    float Capacity_increment = 0.0; //  [mAs]
+    // float Capacity = 0.0;           //  [mAh]
+    // float Capacity_increment = 0.0; //  [mAs]
 
-    float Energy = 0.0;           // [mWh]
-    float Energy_increment = 0.0; //  [mWs]
+    // float Energy = 0.0;           // [mWh]
+    // float Energy_increment = 0.0; //  [mWs]
 
-    float R_circ = 1.11265; // Total circuit resistance
-    float R_bat = 0.0;      // Internal resistance of battery
+    // float R_circ = 1.11265; // Total circuit resistance
+    // float R_bat = 0.0;      // Internal resistance of battery
 
     // char cVolt[8];
     // char cCurr[8];

@@ -14,7 +14,7 @@ License: MIT License
  **********************************************************************/
 
 /**
- * @file 
+ * @file
  * @defgroup batterymeter Battery Meter library <batterymeter.h>
  * @code #include <batterymeter.h> @endcode
  *
@@ -22,53 +22,72 @@ License: MIT License
  *
  * The library contains macros for initialization and data displaying using an OLED display
  *
- * @note Based on Microchip Atmel ATmega328P manual, OLED and Timer libaries. 
+ * @note Based on Microchip Atmel ATmega328P manual, OLED and Timer libaries.
  * @author Jan Čipl, Vojtěch Drtina, Jan Gadas, Christopher Koiš
  * @copyright This work is licensed under the terms of the MIT license
  */
 
-
 /* Includes ----------------------------------------------------------*/
 #include <avr/io.h>        // AVR device-specific IO definitions
 #include <avr/interrupt.h> // Interrupts standard C library for AVR-GCC
-#include <stdio.h> // C library for IO operations
-#include <math.h>  // C library for math operations
-#include <gpio.h>  //
-#include <uart.h>  // Peter Fleury's UART library
-#include <oled.h> 
+#include <stdio.h>         // C library for IO operations
+#include <math.h>          // C library for math operations
+#include <gpio.h>          //
+#include <uart.h>          // Peter Fleury's UART library
+#include <oled.h>
 #include "..\..\include\timer.h" // Timer library for AVR-GCC
 
+// Global vars
+volatile float ADC_A0;          // Analog pin A0 voltage
+volatile uint16_t TIM1_OVF_CNT; // Timer1 overflow counter
+
+volatile uint8_t isStarted;
+volatile uint16_t Current_Time;
+
+volatile float Voltage;
+volatile float Voltage_unloaded;
+volatile float Voltage_dropped;
+
+volatile float Current;
+
+volatile float Capacity;           //  [mAh]
+volatile float Capacity_increment; //  [mAs]
+
+volatile float Energy;           // [mWh]
+volatile float Energy_increment; //  [mWs]
+
+volatile float R_circ; // Total circuit resistance
+volatile float R_bat;      // Internal resistance of battery
 
 /* Defines -----------------------------------------------------------*/
 /**
  * @name  Battery Meter initialization and pin definitions
  */
 /** @brief PD2 is Start button for battery measurement */
-#define Start_button PD2 
+#define Start_button PD2
 /** @brief PD3 is Stop button for battery measurement */
-#define Stop_button PD3  
+#define Stop_button PD3
 /** @brief PB0 is measurement trigger pin for external battery load circuit */
-#define Base_ON PB0      
+#define Base_ON PB0
 /** @brief Select ADC voltage reference to "AVcc with external capacitor at AREF pin" */
-#define ADC_INT_REF         ADMUX |= (1 << REFS0);
+#define ADC_INT_REF ADMUX |= (1 << REFS0);
 /** @brief Select input channel ADC0 (voltage divider pin) */
-#define ADC_CHANNEL_0       ADMUX &= ~(1 << MUX3 | 1 << MUX2 | 1 << MUX1 | 1 << MUX0);
+#define ADC_CHANNEL_0 ADMUX &= ~(1 << MUX3 | 1 << MUX2 | 1 << MUX1 | 1 << MUX0);
 /** @brief Enable ADC module */
-#define ADC_ENABLE          ADCSRA |= (1 << ADEN);
+#define ADC_ENABLE ADCSRA |= (1 << ADEN);
 /** @brief Enable conversion complete interrupt */
-#define ADC_ISR_ENABLE      ADCSRA |= (1 << ADIE);
+#define ADC_ISR_ENABLE ADCSRA |= (1 << ADIE);
 /** @brief Set clock prescaler to 128 → F_CPU/PS = 125 kHz ADC clock @16 MHz */
-#define ADC_PS_128          ADCSRA |= (1 << ADPS2 | 1 << ADPS1 | 1 << ADPS0);
+#define ADC_PS_128 ADCSRA |= (1 << ADPS2 | 1 << ADPS1 | 1 << ADPS0);
 /** @brief Set the CPU clock frequency to 16 MHz, required by UART */
 #ifndef F_CPU
 #define F_CPU 16000000
 #endif
 
 /**
- * @name  
- * @note  
+ * @name
+ * @note
  */
-
 
 /* Functions -----------------------------------------------------------*/
 /**
@@ -77,7 +96,7 @@ License: MIT License
 /**
    @brief   Initialize Battery Meter
    @param   none
-   @return  none 
+   @return  none
 */
 extern void batterymeter_init(void);
 
@@ -86,7 +105,7 @@ extern void batterymeter_init(void);
    @param   screenID Specify screen ID. 1:  Starting screen
                                         2:  Measurement screen
                                         3:  Finished screen
-   @return  none 
+   @return  none
 */
 extern void batterymeter_change_scr(unsigned int screenID);
 
@@ -96,41 +115,41 @@ extern void batterymeter_change_scr(unsigned int screenID);
    @param   y   y coordinate for virtual text cursor in oled_gotoxy(x,y)
    @param   value   Value of chosen variable to be formatted
    @param   string  Optional string to be formatted
-   @return  none 
+   @return  none
 */
-extern void batterymeter_write_var(unsigned int x, unsigned int y, float value, char* string);
+extern void batterymeter_write_var(unsigned int x, unsigned int y, float value, char *string);
 
 /**
    @brief   Write formatted string into OLED RAM
    @param   x   x coordinate for virtual text cursor in oled_gotoxy(x,y)
    @param   y   y coordinate for virtual text cursor in oled_gotoxy(x,y)
    @param   string  String output
-   @return  none 
+   @return  none
 */
-extern void batterymeter_write_line(unsigned int x, unsigned int y, char* string);
+extern void batterymeter_write_line(unsigned int x, unsigned int y, char *string);
 
 /**
    @brief   Put formatted string into UART, that contains a variable
    @param   value    Variable value to be formatted
    @param   string   String output for UART
-   @return  none 
+   @return  none
 */
-extern void batterymeter_uart_puts(float value, char* string);
+extern void batterymeter_uart_puts(float value, char *string);
 
 /**
    @brief   Clear line on OLED display
    @param   y Line number
-   @return  none 
+   @return  none
 */
 extern void batterymeter_clear_line(unsigned int y);
 
 /**
    @brief   Stop measurement
-   @param   isStarted Status flag.  1: started
+   @param   flag Status flag.  1: started
                                     0: stopped
-   @return  none 
+   @return  none
 */
-extern void batterymeter_stop_measure(unsigned char* isStarted);
+extern void batterymeter_stop_measure(volatile uint8_t* flag);
 
 /** @} */
 

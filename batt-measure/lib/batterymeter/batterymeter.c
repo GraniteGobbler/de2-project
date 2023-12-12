@@ -8,14 +8,29 @@
 #include <oled.h> 
 #include "batterymeter.h"
 
-// Global vars
-volatile float ADC_A0;          // Analog pin A0 voltage
-volatile uint16_t TIM1_OVF_CNT; // Timer1 overflow counter
 
 
 // Funcs
 void batterymeter_init()
 {
+    isStarted = 0;
+    Current_Time = 0;
+
+    Voltage = 0.0;
+    Voltage_unloaded = 0.0;
+    Voltage_dropped = 0.0;
+
+    Current = 0.0;
+
+    Capacity = 0.0;           //  [mAh]
+    Capacity_increment = 0.0; //  [mAs]
+
+    Energy = 0.0;           // [mWh]
+    Energy_increment = 0.0; //  [mWs]
+
+    R_circ = 1.11265; // Total circuit resistance
+    R_bat = 0.0;      // Internal resistance of battery
+
     uart_init(UART_BAUD_SELECT(115200, F_CPU));
     uart_puts("Init start\r\n");
 
@@ -152,7 +167,7 @@ void batterymeter_clear_line(unsigned int y)
     oled_gotoxy(0,y);  oled_puts("                     ");
 }
 
-void batterymeter_stop_measure(unsigned char* flag)
+void batterymeter_stop_measure(volatile uint8_t* flag)
 {
     *flag = 0;
     oled_clrscr();
