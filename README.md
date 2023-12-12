@@ -169,7 +169,7 @@ Then you can check volatage of battery and if its suitable for measurement.
 
 ## Demonstration
 
-[![Demo video](https://img.youtube.com/vi/g1Zs0lZ0VUw/0.jpg)](https://www.youtube.com/watch?v=g1Zs0lZ0VUw)
+[Demo video](https://www.youtube.com/watch?v=g1Zs0lZ0VUw)
 
 
 ## References
