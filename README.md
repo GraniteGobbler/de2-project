@@ -22,7 +22,7 @@ We decided to construct user friendly 18650 battery tester. We can measure volta
   <img src="img/board.svg" alt="Arduino UNO board connections"/>
 </p>
 
-We used 2 buttons connected to digital pins `PD2` (Start button) and `PD3` (Pause/Stop button). The green one starts measurement and the red is used to pause the measurement. OLED display is connected to `SDA` and `SCL` pins. Our discharging circuit is connected to `PD8` and Analog pins `A0`.  
+We used 2 buttons connected to digital pins `PD2` (Start button) and `PD3` (Pause/Stop button). The green one starts measurement and the red is used to pause the measurement. OLED display is connected to `SDA` and `SCL` pins. Our discharging circuit is connected to pins `PD8` and `A0`.  
 
 ### Schematic of battery discharging circuit
 <p align="center">
