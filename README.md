@@ -55,7 +55,7 @@ Some screenshots of the Arduino board side circuit with UART console open.
 </p>
 
 ## Software description
-
+ 
 <p align="center">
   <img src="img/diagram.svg" width="700" alt="Program flow chart"/>
 </p>
