@@ -107,7 +107,7 @@ if ((TIM1_OVF_CNT == 3) & (R_bat == 0)) // If time == 3sec, measure dropped volt
 }
 ```
 
-Capacity (not to be confused with capacitance) is incremented every second and calculated from the discharge current. The increments are in [mAs] and are converted to [mAh] once they are cumulatively added. Same goes for energy, which is in [mWh]. It is calculated similarly as capacity, but multiplied by `Voltage` since `P = U·I`.
+Capacity (not to be confused with capacitance) is incremented every second and calculated from the discharge current. The increments are in mAs and are converted to mAh once they are cumulatively added. Same goes for energy, which is in mWh. It is calculated similarly as capacity, but multiplied by `Voltage` since `P = U·I`.
 
 ``` c
 Capacity_increment = (1000 * Current);             // [mAs]
@@ -115,7 +115,6 @@ Capacity = Capacity + (Capacity_increment / 3600); // [mAh]
 
 Energy_increment = Capacity_increment * Voltage; // [mWs]
 Energy = Energy + (Energy_increment / 3600);     // [mWh]
-
 ```
 
 During the measurement the electrical quantities are shown on the display and updated every second. The `oled_puts();` function is required in order to write a string into the OLED RAM. We write a lot into that RAM and usually specify the exact spot on the display. For that we have devised a simple function that accepts values of variables. It also sends that string via UART for debugging purposes.
