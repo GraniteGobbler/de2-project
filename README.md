@@ -29,7 +29,7 @@ We used 2 buttons connected to digital pins `PD2` (Start button) and `PD3` (Paus
   <img src="img/BATT Meas Circuit_2.svg" alt="Schematic of battery discharging circuit"/>
 </p>
 
-The discharging circuit consists of a IRF8010 MOSFET as a switch that is controlled by a BC557 BJT. The base of the BJT is connected via 10 kΩ resistor to the `PB0` digital pin. A red LED is turned on when the BJT is switched. The circuit resistance has to be measured separately, as we are using only a single analog pin for voltage measurement. 
+The discharging circuit consists of a IRF8010 MOSFET as a switch that is controlled by a BC557 BJT. The base of the BJT is connected via 10 kΩ resistor to the `PB0` digital pin. A red LED is turned on when the BJT is switched. The circuit resistance has to be measured separately, as we are using only a single analog pin for voltage measurement. The schematic was made in [Falstad Circuit Simulator](https://www.falstad.com/circuit/circuitjs.html).
 
 The battery capacity measurement is slightly skewed, because of how we measure internal resistance of the cell, which is calculated 3 seconds after the measurement is started. This approach is **not** the most accurate, but very simple and requires no muxing of the ADC inputs which could lead to timing inconsistencies.
 
@@ -177,3 +177,4 @@ Then you can check volatage of battery and if its suitable for measurement.
 1. [Atmega328 datasheet](https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/40001906C.pdf)
 2. [DE2 Course Repository](https://github.com/tomas-fryza/digital-electronics-2)
 3. [Markdown Guide](https://www.markdownguide.org/)
+4. [Falstad Circuit Simulator](https://www.falstad.com/circuit/circuitjs.html)
