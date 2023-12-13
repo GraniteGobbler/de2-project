@@ -178,3 +178,4 @@ Then you can check volatage of battery and if its suitable for measurement.
 2. [DE2 Course Repository](https://github.com/tomas-fryza/digital-electronics-2)
 3. [Markdown Guide](https://www.markdownguide.org/)
 4. [Falstad Circuit Simulator](https://www.falstad.com/circuit/circuitjs.html)
+5. [MOSFET Datasheet](https://www.infineon.com/dgdl/irf8010pbf.pdf?fileId=5546d462533600a40153560cce1f1d47)
